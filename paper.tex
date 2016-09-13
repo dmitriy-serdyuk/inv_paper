@@ -176,6 +176,22 @@ speech recognition, deep neural networks, invariant representations, adversarial
     classifier and domain adaptation networks respectively. The hyper-parameters
     $\alpha$ and $\beta$ denote the influence of every part of the cost.
 
+\subsection{Adversarial Cost Types}
+
+%TODO: explain -log(\hat{y}) and log(1 - \hat{y})
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{model.pdf}
+    \caption{The model consists of three neural networks. The encoder $E$ produces
+    the intermediate representation $h$ which used in the recognizer $R$ and 
+    in the discriminator $D$. The hidden representation $h$ is trained to improve
+    the recognition and minimize the discrimination accuracy. The discriminator
+    is a classifier trained to maximize its accuracy on the gender or the noise type
+    recognition task.}
+    \label{fig:model}
+\end{figure}
+
 \section{Related Work}
 
 \section{Experiments}
