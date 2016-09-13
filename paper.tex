@@ -82,6 +82,25 @@ speech recognition, deep neural networks, invariant representations, adversarial
 %
 \section{Introduction}
 \label{sec:intro}
+    One of the most challenging aspects of automatic speech recognition (ASR),
+    is the mismatch between the training and testing conditions. During
+    testing, a system may encounter new recording conditions, microphone types,
+    accents and types of background noises. Even if all testing conditions also appeared
+    in the train data, their relative distribution is likely to be
+    different. For this reason, it's important to develop systems that are
+    robust towards changes in recording conditions in general.
+
+    While many types of model and feature based adaptation methods like MLLR and fMLLR
+    \cite{leggetter1995maximum} have been proposed, most of these methods have
+    been designed with GMM-HMM systems in mind. Since the enormous success of
+    Deep Neural Network (DNN) systems for ASR \cite{hinton2012deep}, GMM-based
+    model adaptation is not possible anymore, while feature-based methods may
+    not be optimal anymore.
+    Moreover, the discriminative gradient-based optimization used to train
+    DNNs, in combination with the ability of DNNs to learn highly non-linear
+    feature transformations, allows for more flexibility when it comes to the
+    construction of training objectives that promote domain invariant
+    representations.
 
     The main idea of this work is that instead of training a robust system,
     it is possible to train a system which will be invariant to these 
@@ -113,12 +132,12 @@ speech recognition, deep neural networks, invariant representations, adversarial
     and can be trained with the gradient methods (see 
     Section~\ref{sec:optimization}). The main idea of the generative adversarial
     training is that it is possible to propagate the gradient of the discriminator
-    network further to the the generator network staking them on top of each other.
+    network further to the generator network staking them on top of each other.
     This leads to an efficient training procedure and GANs achieve the state of the
     art that time on handwritten digit generation MNIST dataset.
 
     In other words, these two networks are competing with each other the 
-    generator is trying to deceive a the discriminator network while it tries
+    generator is trying to deceive the discriminator network while it tries
     to do its best to recognize if there was a deception. This game theoretical
     similarity gave a name of adversarial networks. The objective of adversarial
     training is following
@@ -129,7 +148,7 @@ speech recognition, deep neural networks, invariant representations, adversarial
 
     One of the properties of GAN networks that there is no straightforward way 
     to evaluate the quality of image generation process since the GAN doesn't 
-    output the loglikelihood of its samples. The paper estimated the likelihood
+    output the log-likelihood of its samples. The paper estimated the likelihood
     using the Parzen windows estimator.
 
     In practice, GANs might be hard to train due to the fact that in a case when 
@@ -173,6 +192,38 @@ speech recognition, deep neural networks, invariant representations, adversarial
 \section{Related Work}
 
 \section{Experiments}
+We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-reverse} 
+on a noisy speech recognition dataset Aurora-4~\cite{parihar2002aurora}. This dataset
+is based on the Wall Street Journal (WSJ0 is available at LDC). Additive noise of 
+six categories (airport, babble, car, restaurant, street, train) was introduced to the 
+clean data. We used mel-filterbank features with their deltas and delta-deltas spliced
+over 5 frames on each side making 11 consecutive frames and 1320 input features. 
+We did not use any speaker normalization of input features. We pretrained 5 layer
+speech recognition network with 2048 rectified linear units at every layer using Adam 
+optimization algorithm for 5 epochs. After pretraining, we turned on the invariance term.
+
+First expriment we performed is the gender invariance. We added a 2 layer network 
+branching off the last layer of the pretrained speech recognition network and 
+trained it until convergence with SGD. Although, the performance remained unchanged,
+the t-SNE visualization on Figure~\ref{fig:tsne} demonstrates that the hidden units
+are less separated in the projected space.
+
+\begin{figure}
+    \centering
+    %TODO: add image
+    \begin{subfigure}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{tsne-original.png}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{tsne-invariant.png}
+    \end{subfigure}%
+    \caption{t-SNE visualization of the last hidden layer. On the left, the baseline
+    model. On the right, the model trained with the adversarial objective. Colors 
+    represent genders.}
+    \label{fig:tsne}
+\end{figure}
 
 \section{Conclusion}
 
