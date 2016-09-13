@@ -28,24 +28,11 @@
 %
 % Single address.
 % ---------------
-%\name{Dmitriy Serdyuk $^{\dagger}$ \qquad Kartik Audhkhasi$^{\star}$ \and Philemon Brakel$^{\dagger}$ \and Bhuvana Ramabhadran$^{\star}$  \and Yoshua Bengio$^{\dagger}$\thanks{Yoshua Bengio is a CIFAR Fellow.}}
-%\address{$^{\dagger}$ Universit\'e de Montr\'eal, $^{\star}$ IBM}
-%
-% For example:
-% ------------
-%\address{School\\
-%	Department\\
-%	Address}
-%
-% Two addresses (uncomment and modify for two-address case).
-% ----------------------------------------------------------
-\twoauthors
-  {Dmitriy Serdyuk $^{\dagger}$\thanks{Dmitriy Serdyuk performed the work
+\name{Dmitriy Serdyuk $^{\dagger}$\thanks{Dmitriy Serdyuk performed the work
   while at IBM}, Kartik Audhkhasi$^{\star}$, Phil\'emon Brakel$^{\dagger}$, Bhuvana Ramabhadran$^{\star}$, Yoshua Bengio$^{\dagger}$\thanks{Yoshua Bengio is a CIFAR Fellow.}}
-  {$^{\dagger}$ Universit\'e de Montr\'eal \\
-  $^{\star}$ IBM}
-  {}
-  {}
+\address{$^{\dagger}$ Universit\'e de Montr\'eal\\
+         $^{\star}$ IBM}
+
 
 
 \begin{document}
@@ -73,7 +60,7 @@
     noise classifier to produce the representation produced by the encoder to decrease
     the performance of the classifier making the representation invariant to noise conditions. We
     experimentally evaluate proposed architectures on the acoustic modelling task
-    for speech recognition on a popular benchmark Aurora4.
+    for speech recognition on a popular benchmark Aurora-4.
 \end{abstract}
 %
 \begin{keywords}
@@ -194,23 +181,29 @@ speech recognition, deep neural networks, invariant representations, adversarial
 \section{Experiments}
 We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-reverse} 
 on a noisy speech recognition dataset Aurora-4~\cite{parihar2002aurora}. This dataset
-is based on the Wall Street Journal (WSJ0 is available at LDC). Additive noise of 
+is based on the Wall Street Journal corpus (WSJ0 is available at LDC). Additive noise of 
 six categories (airport, babble, car, restaurant, street, train) was introduced to the 
 clean data. We used mel-filterbank features with their deltas and delta-deltas spliced
-over 5 frames on each side making 11 consecutive frames and 1320 input features. 
+over 5 frames on each side making 11 consecutive frames and 1320 input features in total. 
 We did not use any speaker normalization of input features. We pretrained 5 layer
 speech recognition network with 2048 rectified linear units at every layer using Adam 
 optimization algorithm for 5 epochs. After pretraining, we turned on the invariance term.
 
-First expriment we performed is the gender invariance. We added a 2 layer network 
+The first expriment we performed is the gender invariance. We added a 2 layer network 
 branching off the last layer of the pretrained speech recognition network and 
 trained it until convergence with SGD. Although, the performance remained unchanged,
-the t-SNE visualization on Figure~\ref{fig:tsne} demonstrates that the hidden units
+the t-SNE visualization in Figure~\ref{fig:tsne} demonstrates that the hidden units
 are less separated in the projected space.
+
+Next, we trained a model for the noise condition invariance. We used an architecture
+similar to one described above with a binary invariance classifier target denoting 
+whether the utterance is clean or noisy. We oversampled the noisy utterances to 
+address the fact that the labels are not ballanced, the clean subset has approximately 4400
+when every noisy condition subset contains only 443 utterances. The results are
+summarized in Table~\ref{tab:results}.
 
 \begin{figure}
     \centering
-    %TODO: add image
     \begin{subfigure}[b]{0.5\linewidth}
         \centering
         \includegraphics[width=\linewidth]{tsne-original.png}
@@ -219,11 +212,33 @@ are less separated in the projected space.
         \centering
         \includegraphics[width=\linewidth]{tsne-invariant.png}
     \end{subfigure}%
-    \caption{t-SNE visualization of the last hidden layer. On the left, the baseline
+    \caption{t-SNE visualization of the last hidden layer using the clean development
+    subset. On the left, the baseline
     model. On the right, the model trained with the adversarial objective. Colors 
     represent genders.}
     \label{fig:tsne}
 \end{figure}
+
+\begin{table}
+    \centering
+    \caption{Results for word error rate (WER\%) on Aurora-4 dataset.}
+    \label{tab:results}
+    \begin{tabular}{r|cc|cc}
+    \multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
+               & wv1  & wv2  & wv1  & wv2 \\
+    \hline 
+    clean      & 4.04 & 6.76 & & \\
+    airport    & 7.44 & 15.36& & \\
+    babble     & 7.86 & 15.88& & \\
+    car        & 4.17 & 8.99 & & \\
+    restaurant & 9.25 & 17.32& & \\
+    street     & 7.79 & 16.14& & \\
+    train      & 8.18 & 17.26& & \\
+    \hline
+    Average    & \multicolumn{2}{c}{10.46}& & 
+    \end{tabular}
+    %TODO: add numbers!
+\end{table}
 
 \section{Conclusion}
 
