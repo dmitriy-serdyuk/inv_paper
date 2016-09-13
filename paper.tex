@@ -55,15 +55,25 @@
 %
 \begin{abstract}
     Robustness of a speech recognition system is a challenging task and modern
-    automatic speech recognition (ASR) systems need to be robust to different recording conditions,
+    automatic speech recognition (ASR) systems need to be resilient to different recording conditions,
     microphone type, accents, and noisy recording environment. We mitigate
     this problem in a fashion similar to recent research on image generation using
     Generative Adversarial Networks and domain adaptation ideas extending
-    adversarial gradient-based training.
+    adversarial gradient-based training. A recent work of Ganin et al. proposes to
+    use adversarial training procedure for image domain adaptation making an intermediate
+    representation to improve the target performance and at the same time
+    to deteriorate the domain classifier performance, which is a separate neural
+    network taking the intermediate representation as the input.
+
     This work focuses on investigation of neural architectures which produce
-    representations invariant to certain conditions as gender and noise type. We
+    representations invariant to certain conditions as the noise type for speech
+    recognition. Similar
+    to the Ganin et al. work we train the intermediate representation to be invariant
+    to noise conditions training three neural networks: the encoder, the recognizer, and the
+    noise classifier to produce the representation produced by the encoder to decrease
+    the performance of the classifier making the representation invariant to noise conditions. We
     experimentally evaluate proposed architectures on the acoustic modelling task
-    for speech recognition on the Aurora4 dataset.
+    for speech recognition on a popular benchmark Aurora4.
 \end{abstract}
 %
 \begin{keywords}
