@@ -72,6 +72,25 @@ speech recognition, deep neural networks, invariant representations, adversarial
 %
 \section{Introduction}
 \label{sec:intro}
+    One of the most challenging aspects of automatic speech recognition (ASR),
+    is the mismatch between the training and testing conditions. During
+    testing, a system may encounter new recording conditions, microphone types,
+    accents and types of background noises. Even if all testing conditions also appeared
+    in the train data, their relative distribution is likely to be
+    different. For this reason, it's important to develop systems that are
+    robust towards changes in recording conditions in general.
+
+    While many types of model and feature based adaptation methods like MLLR and fMLLR
+    \cite{leggetter1995maximum} have been proposed, most of these methods have
+    been designed with GMM-HMM systems in mind. Since the enormous success of
+    Deep Neural Network (DNN) systems for ASR \cite{hinton2012deep}, GMM-based
+    model adaptation is not possible anymore, while feature-based methods may
+    not be optimal anymore.
+    Moreover, the discriminative gradient-based optimization used to train
+    DNNs, in combination with the ability of DNNs to learn highly non-linear
+    feature transformations, allows for more flexibility when it comes to the
+    construction of training objectives that promote domain invariant
+    representations.
 
     The main idea of this work is that instead of training a robust system,
     it is possible to train a system which will be invariant to these 
@@ -103,12 +122,12 @@ speech recognition, deep neural networks, invariant representations, adversarial
     and can be trained with the gradient methods (see 
     Section~\ref{sec:optimization}). The main idea of the generative adversarial
     training is that it is possible to propagate the gradient of the discriminator
-    network further to the the generator network staking them on top of each other.
+    network further to the generator network staking them on top of each other.
     This leads to an efficient training procedure and GANs achieve the state of the
     art that time on handwritten digit generation MNIST dataset.
 
     In other words, these two networks are competing with each other the 
-    generator is trying to deceive a the discriminator network while it tries
+    generator is trying to deceive the discriminator network while it tries
     to do its best to recognize if there was a deception. This game theoretical
     similarity gave a name of adversarial networks. The objective of adversarial
     training is following
@@ -119,7 +138,7 @@ speech recognition, deep neural networks, invariant representations, adversarial
 
     One of the properties of GAN networks that there is no straightforward way 
     to evaluate the quality of image generation process since the GAN doesn't 
-    output the loglikelihood of its samples. The paper estimated the likelihood
+    output the log-likelihood of its samples. The paper estimated the likelihood
     using the Parzen windows estimator.
 
     In practice, GANs might be hard to train due to the fact that in a case when 
