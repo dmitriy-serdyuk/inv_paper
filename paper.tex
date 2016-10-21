@@ -3,16 +3,27 @@
 %          IEEEbib.bst - IEEE bibliography style file.
 % --------------------------------------------------------------------------
 \documentclass{article}
-\usepackage{spconf,amsmath,graphicx}
+
+
+\usepackage[final]{nips_2016}
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage[draft]{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+
+\usepackage{amsmath,graphicx}
 \usepackage{bm}
-\usepackage{hyperref}
 \usepackage{url}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{amsfonts}
 \usepackage{graphicx}
 \usepackage{subcaption}
-\usepackage{hyperref}
 \usepackage{algorithm2e}
 \usepackage{pbox}
 \usepackage{multirow}
@@ -28,10 +39,40 @@
 %
 % Single address.
 % ---------------
-\name{Dmitriy Serdyuk $^{\dagger}$\thanks{Dmitriy Serdyuk performed the work
-  while at IBM}, Kartik Audhkhasi$^{\star}$, Phil\'emon Brakel$^{\dagger}$, Bhuvana Ramabhadran$^{\star}$, Yoshua Bengio$^{\dagger}$\thanks{Yoshua Bengio is a CIFAR Fellow.}}
-\address{$^{\dagger}$ Universit\'e de Montr\'eal\\
-         $^{\star}$ IBM}
+%\name{Dmitriy Serdyuk $^{\dagger}$\thanks{Dmitriy Serdyuk performed the work
+%  while at IBM}, Kartik Audhkhasi$^{\star}$, Phil\'emon Brakel$^{\dagger}$, Bhuvana Ramabhadran$^{\star}$, Yoshua Bengio$^{\dagger}$\thanks{Yoshua Bengio is a CIFAR Fellow.}}
+%\address{$^{\dagger}$ Universit\'e de Montr\'eal\\
+%         $^{\star}$ IBM}
+\author{
+  Dmitriy Serdyuk\thanks{Dmitriy Serdyuk performed the work 
+    during an internship at IBM} \\
+  MILA\\
+  Universit\'e de Montr\'eal\\
+  Montr\'eal, QC H3T 1J4 \\
+  \texttt{serdyuk@iro.umontreal.ca} \\
+  \And
+  Kartik Audhkhasi \\
+  IBM \\
+  Yorktown Heights, NY 10598\\
+  \texttt{kaudhkha@us.ibm.com} \\
+  \And
+  Phil\'emon Brakel \\
+  MILA\\
+  Universit\'e de Montr\'eal\\
+  Montr\'eal, QC H3T 1J4 \\
+  \texttt{pbpop3@gmail.com} \\
+  \And
+  Bhuvana Ramabhadran\\
+  IBM \\
+  Yorktown Heights, NY 10598\\
+  \texttt{bhuvana@us.ibm.com} \\
+  \And
+  Yoshua Bengio\\
+  MILA, CIFAR Fellow\\
+  Universit\'e de Montr\'eal\\
+  Montr\'eal, QC H3T 1J4 \\
+  \texttt{findme@inter.net} \\
+}
 
 
 
@@ -51,7 +92,6 @@
     representation to improve the target performance and at the same time
     to deteriorate the domain classifier performance, which is a separate neural
     network taking the intermediate representation as the input.
-
     This work focuses on investigation of neural architectures which produce
     representations invariant to certain conditions as the noise type for speech
     recognition. Similar
@@ -63,9 +103,9 @@
     for speech recognition on a popular benchmark Aurora-4.
 \end{abstract}
 %
-\begin{keywords}
-speech recognition, deep neural networks, invariant representations, adversarial training
-\end{keywords}
+%\begin{keywords}
+%speech recognition, deep neural networks, invariant representations, adversarial training
+%\end{keywords}
 %
 \section{Introduction}
 \label{sec:intro}
@@ -116,27 +156,26 @@ speech recognition, deep neural networks, invariant representations, adversarial
     from the training set, the task of the discriminator is to distinguish
     between a generated image and a ``real'' image taken from the dataset. Thus
     the discriminator is just a classifier network with a sigmoid output
-    and can be trained with the gradient methods (see 
-    Section~\ref{sec:optimization}). The main idea of the generative adversarial
+    and can be trained with the gradient methods. The main idea of the generative adversarial
     training is that it is possible to propagate the gradient of the discriminator
-    network further to the generator network staking them on top of each other.
-    This leads to an efficient training procedure and GANs achieve the state of the
+    network further to the generator network stacking them on top of each other.
+    This leads to an efficient training procedure and GANs achieved the state of the
     art that time on handwritten digit generation MNIST dataset.
 
     In other words, these two networks are competing with each other the 
     generator is trying to deceive the discriminator network while it tries
     to do its best to recognize if there was a deception. This game theoretical
-    similarity gave a name of adversarial networks. The objective of adversarial
-    training is following
+    similarity gave a name of adversarial networks. If we put it formally, the 
+    objective of adversarial training is
     \begin{align*}
-        \min_G \max_D V(D, G) = \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
-          \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
+        \min_G \max_D V(D, G) = \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + 
+            \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
     \end{align*}
 
-    One of the properties of GAN networks that there is no straightforward way 
-    to evaluate the quality of image generation process since the GAN doesn't 
-    output the log-likelihood of its samples. The paper estimated the likelihood
-    using the Parzen windows estimator.
+    %One of the properties of GAN networks that there is no straightforward way 
+    %to evaluate the quality of image generation process since the GAN doesn't 
+    %output the log-likelihood of its samples. The paper estimated the likelihood
+    %using the Parzen windows estimator.
 
     In practice, GANs might be hard to train due to the fact that in a case when 
     the discriminator is more powerful that the generator, the later doesn't 
@@ -176,13 +215,16 @@ speech recognition, deep neural networks, invariant representations, adversarial
     classifier and domain adaptation networks respectively. The hyper-parameters
     $\alpha$ and $\beta$ denote the influence of every part of the cost.
 
+\subsection{Invariant represenations for speech recognition}
+\label{sec:invariant-speech}
+
 \subsection{Adversarial Cost Types}
 
 %TODO: explain -log(\hat{y}) and log(1 - \hat{y})
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\linewidth]{model.pdf}
+    \includegraphics[width=0.3\linewidth]{model.pdf}
     \caption{The model consists of three neural networks. The encoder $E$ produces
     the intermediate representation $h$ which used in the recognizer $R$ and 
     in the discriminator $D$. The hidden representation $h$ is trained to improve
@@ -193,14 +235,22 @@ speech recognition, deep neural networks, invariant representations, adversarial
 \end{figure}
 
 \section{Related Work}
+    Earlier approaches include various works on denoising including
+
+    In a work~\cite{yusuke2016adversarial} an acoustic model trained in an adversarial fashion is
+    applied to an in-house dataset based on Wall Street Journal 1 corrupted with additive noise.
+    
 
 \section{Experiments}
 We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-reverse} 
 on a noisy speech recognition dataset Aurora-4~\cite{parihar2002aurora}. This dataset
-is based on the Wall Street Journal corpus (WSJ0 is available at LDC). Additive noise of 
+is based on the Wall Street Journal corpus (WSJ0 is available at LDC). Noise of 
 six categories (airport, babble, car, restaurant, street, train) was introduced to the 
-clean data. We used mel-filterbank features with their deltas and delta-deltas spliced
+clean data. This noise was added and filtering simulating sampling frequency was applyed 
+both to clean and noisy data. 
+We used mel-filterbank features with their deltas and delta-deltas spliced
 over 5 frames on each side making 11 consecutive frames and 1320 input features in total. 
+Global mean and variance normalization was applied to these features.
 We did not use any speaker normalization of input features. We pretrained 5 layer
 speech recognition network with 2048 rectified linear units at every layer using Adam 
 optimization algorithm for 5 epochs. After pretraining, we turned on the invariance term.
@@ -243,13 +293,13 @@ summarized in Table~\ref{tab:results}.
     \multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
                & wv1  & wv2  & wv1  & wv2 \\
     \hline 
-    clean      & 4.04 & 6.76 & & \\
-    airport    & 7.44 & 15.36& & \\
-    babble     & 7.86 & 15.88& & \\
-    car        & 4.17 & 8.99 & & \\
-    restaurant & 9.25 & 17.32& & \\
-    street     & 7.79 & 16.14& & \\
-    train      & 8.18 & 17.26& & \\
+    clean      & 4.04 & 6.76 & 5.03& 7.53 \\
+    airport    & 7.44 & 15.36& 8.22& 16.03\\
+    babble     & 7.86 & 15.88& 9.06& 17.82\\
+    car        & 4.17 & 8.99 & 5.21& 9.81 \\
+    restaurant & 9.25 & 17.32& 12.2& 19.60\\
+    street     & 7.79 & 16.14& 9.34& 17.56\\
+    train      & 8.18 & 17.26& 9.60& 18.66\\
     \hline
     Average    & \multicolumn{2}{c}{10.46}& & 
     \end{tabular}
@@ -261,7 +311,7 @@ summarized in Table~\ref{tab:results}.
 
 \section*{Acknowledgments}
 
-We would like to thank Yaroslav Ganin, David Warde-Farley for insightful discussions,
+We would like to thank Yaroslav Ganin, David Warde-Farley, Samuel Thomas for insightful discussions,
 developers of Theano~\cite{2016arXiv160502688short}, Blocks, and Fuel~\cite{MerrienboerBDSW15} 
 for great instruments.
 
@@ -269,7 +319,8 @@ for great instruments.
 % BiBTeX files (here: strings, refs, manuals). The IEEEbib.bst bibliography
 % style file from IEEE produces unsorted bibliography list.
 % -------------------------------------------------------------------------
-\bibliographystyle{IEEE}
+%\bibliographystyle{IEEE}
+\bibliographystyle{authordate1}
 \bibliography{refs}
 
 \end{document}

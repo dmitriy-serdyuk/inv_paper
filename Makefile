@@ -7,4 +7,4 @@ paper.pdf: paper.tex refs.bib model.pdf
 	pdflatex paper.tex
 
 clean:
-	rm paper.pdf paper.aux paper.log paper.bbl paper.blg
+	rm paper.pdf paper.aux paper.log paper.bbl paper.blg paper.out
