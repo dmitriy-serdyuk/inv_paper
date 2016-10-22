@@ -35,7 +35,7 @@
 
 % Title.
 % ------
-\title{INVARIANT REPRESENTATIONS FOR NOISY SPEECH RECOGNITION}
+\title{Invariant Representations for Noisy Speech Recognition}
 %
 % Single address.
 % ---------------
@@ -45,14 +45,14 @@
 %         $^{\star}$ IBM}
 \author{
   Dmitriy Serdyuk\thanks{Dmitriy Serdyuk performed the work 
-    during an internship at IBM} \\
+    during an internship at IBM Watson} \\
   MILA\\
   Universit\'e de Montr\'eal\\
   Montr\'eal, QC H3T 1J4 \\
   \texttt{serdyuk@iro.umontreal.ca} \\
   \And
   Kartik Audhkhasi \\
-  IBM \\
+  IBM Watson Research Center \\
   Yorktown Heights, NY 10598\\
   \texttt{kaudhkha@us.ibm.com} \\
   \And
@@ -63,7 +63,12 @@
   \texttt{pbpop3@gmail.com} \\
   \And
   Bhuvana Ramabhadran\\
-  IBM \\
+  IBM  Watson Research Center\\
+  Yorktown Heights, NY 10598\\
+  \texttt{bhuvana@us.ibm.com} \\
+  \And
+  Samuel Thomas\\
+  IBM  Watson Research Center\\
   Yorktown Heights, NY 10598\\
   \texttt{bhuvana@us.ibm.com} \\
   \And
@@ -172,11 +177,6 @@
             \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
     \end{align*}
 
-    %One of the properties of GAN networks that there is no straightforward way 
-    %to evaluate the quality of image generation process since the GAN doesn't 
-    %output the log-likelihood of its samples. The paper estimated the likelihood
-    %using the Parzen windows estimator.
-
     In practice, GANs might be hard to train due to the fact that in a case when 
     the discriminator is more powerful that the generator, the later doesn't 
     receive any gradient thus can not be improved. Usually this problem is solved
@@ -205,22 +205,47 @@
     the domain classifier should have a good classification accuracy. More 
     formally, we define the objective as
     \begin{equation}
-        L = L(\hat{y}, y; \theta_R, \theta_C) + 
+        L = L(\hat{y}, y; \theta_R, \theta_E) + 
         \alpha L(\hat{d}, d; \theta_D) -
-        \beta L(\hat{d}, d; \theta_R),
+        \beta L(\hat{d}, d; \theta_E),
     \end{equation}
     where $y$ is the ground truth class, $d$ is the domain label, corresponding
     hatted variables are the network predictions, $\theta$ are the network 
-    parameters, and $R, C, D$ are the subsets of parameters in the representation,
-    classifier and domain adaptation networks respectively. The hyper-parameters
+    parameters, and $E, R, D$ are the subsets of parameters in the encoder,
+    recogniser and the domain adaptation networks respectively. The hyper-parameters
     $\alpha$ and $\beta$ denote the influence of every part of the cost.
 
-\subsection{Invariant represenations for speech recognition}
+\subsection{Invariant Represenations for Speech Recognition}
 \label{sec:invariant-speech}
 
-\subsection{Adversarial Cost Types}
+In this work we focus on speech recognition using DNN-HMM hybrid systems. The
+recording conditions, speaker identity, or gener might be considred to be domains
+and adptation task corresponds to making the hidden layer representations be 
+invariant with respect to those conditions. We hypothesize that this method of
+training helps to generalize on unseen conditiions and requires only very small
+amount of labeling the conditions, see Section~\ref{sec:experiments} for experimental
+evaluation.
 
-%TODO: explain -log(\hat{y}) and log(1 - \hat{y})
+The model we use is depicted on Figure~\ref{fig:model}. It is a feedforward neural network
+which is trained to predict the HMM state tweaked with a branch for the invariance
+training. This branch is discarded in the testing phase. In our experiments we
+used the noise condition as the domain label merging all noise type to one label
+and clean type to another.
+
+The particular cost we used for our training is
+    \begin{equation}
+        L = L_1(\hat{y}, y; \theta_R, \theta_E) + 
+        L_2(\hat{d}, d; \theta_D) +
+        \beta L_3(\hat{d}, d; \theta_E),
+        \label{eq:cost}
+    \end{equation}
+where $L_3 = - d\log(1 - \hat{d}) - (1-d)\log(\hat{d})$ maximizes the probablity
+of an incorrect domain classification. The terms for $L_1$ and $L_2$ are 
+regular cross-entropy terms which are minimized with respect to the parameters
+after semicolon.
+We don't use any coefficient for first two terms because it is equivalent to 
+changing the learning rate.
+
 
 \begin{figure}
     \centering
@@ -235,83 +260,106 @@
 \end{figure}
 
 \section{Related Work}
-    Earlier approaches include various works on denoising including
+    Earlier approaches include various works on denoising including 
 
     In a work~\cite{yusuke2016adversarial} an acoustic model trained in an adversarial fashion is
     applied to an in-house dataset based on Wall Street Journal 1 corrupted with additive noise.
     
 
 \section{Experiments}
+\label{sec:experiments}
 We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-reverse} 
 on a noisy speech recognition dataset Aurora-4~\cite{parihar2002aurora}. This dataset
-is based on the Wall Street Journal corpus (WSJ0 is available at LDC). Noise of 
-six categories (airport, babble, car, restaurant, street, train) was introduced to the 
-clean data. This noise was added and filtering simulating sampling frequency was applyed 
-both to clean and noisy data. 
-We used mel-filterbank features with their deltas and delta-deltas spliced
-over 5 frames on each side making 11 consecutive frames and 1320 input features in total. 
-Global mean and variance normalization was applied to these features.
-We did not use any speaker normalization of input features. We pretrained 5 layer
-speech recognition network with 2048 rectified linear units at every layer using Adam 
-optimization algorithm for 5 epochs. After pretraining, we turned on the invariance term.
+is based on the Wall Street Journal corpus (WSJ0 is available at LDC). It contains noise of 
+six categories which was added to clean
+data. Every clean and noisy utterance filtered to simulate sampling frequency. The train
+set contains approximately 4400 clean utterances and 446 utterances of each noise condition,
+in total 2676 noisy utterances.
+The test
+set contains clean data, the same 6 noises, and data recorded with a different microphone
+both clean and noise corrupted.
 
-The first expriment we performed is the gender invariance. We added a 2 layer network 
-branching off the last layer of the pretrained speech recognition network and 
-trained it until convergence with SGD. Although, the performance remained unchanged,
-the t-SNE visualization in Figure~\ref{fig:tsne} demonstrates that the hidden units
-are less separated in the projected space.
+We used 16kHz training audio. We extracted mel-filterbank features with their deltas and 
+delta-deltas spliced over 5 frames on each side making 11 consecutive frames and 1320 input 
+features in total. Global mean and variance normalization was applied to these features.
+We did not use any speaker normalization of input features. We trained 6 layer
+speech recognition network with 2048 rectified linear units at every layer using momentum
+accelerated stochastic gradient descent for 15 epochs. We annealed the learning rate accroding 
+to the development set dividing it by 2 when the cross entropy did not improve.
 
-Next, we trained a model for the noise condition invariance. We used an architecture
-similar to one described above with a binary invariance classifier target denoting 
-whether the utterance is clean or noisy. We oversampled the noisy utterances to 
-address the fact that the labels are not ballanced, the clean subset has approximately 4400
-when every noisy condition subset contains only 443 utterances. The results are
-summarized in Table~\ref{tab:results}.
+In order to evaluate the impact of our method on generalization to new, unseen noises 
+we performs 6 groups of experiments with different set of seen noises. We always train
+on clean data and add noise conditions one-by-one in order: airport, babble, car, 
+restaurant, street, train. The last group includes all noises therefore matches the
+standard multi condition training setup. For every group of experiments we trained the
+baseline and the invariance model where we branch out at 4th layer to a logistic 
+binary classifier clean versus noisy data. Due to the imballance between clean and
+noisy parts of the dataset, we had to oversample noisy frames, every minibatch contained
+half of clean and half of noisy data points.
 
-\begin{figure}
-    \centering
-    \begin{subfigure}[b]{0.5\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{tsne-original.png}
-    \end{subfigure}%
-    \begin{subfigure}[b]{0.5\linewidth}
-        \centering
-        \includegraphics[width=\linewidth]{tsne-invariant.png}
-    \end{subfigure}%
-    \caption{t-SNE visualization of the last hidden layer using the clean development
-    subset. On the left, the baseline
-    model. On the right, the model trained with the adversarial objective. Colors 
-    represent genders.}
-    \label{fig:tsne}
-\end{figure}
+The results are summarized in Table~\ref{tab:results}. 
+In our experiments we did not use layerwise pretraining not uncommonly used for small
+datasets due to the difficulties of combining it with the invariance training. Our preliminary
+experiments show that the network is not able to leave the parameter region it reaches after 
+pretraining.
+
+%\begin{figure}
+%    \centering
+%    \begin{subfigure}[b]{0.5\linewidth}
+%        \centering
+%        \includegraphics[width=\linewidth]{tsne-original.png}
+%    \end{subfigure}%
+%    \begin{subfigure}[b]{0.5\linewidth}
+%        \centering
+%        \includegraphics[width=\linewidth]{tsne-invariant.png}
+%    \end{subfigure}%
+%    \caption{t-SNE visualization of the last hidden layer using the clean development
+%    subset. On the left, the baseline
+%    model. On the right, the model trained with the adversarial objective. Colors 
+%    represent genders.}
+%    \label{fig:tsne}
+%\end{figure}
 
 \begin{table}
     \centering
-    \caption{Results for word error rate (WER\%) on Aurora-4 dataset.}
+    \caption{Average word error rate (WER\%) on Aurora-4 dataset on all test conditions,
+        including seen and unseen noise and unseen microphone. First column
+        is the number of noise conditions used for the training set. The last row is a 
+        preliminary experiment with layer-wise pretraining close to state-of-the-art
+        model and a corresponding invariance training starting with a pretrained model.}
     \label{tab:results}
-    \begin{tabular}{r|cc|cc}
-    \multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
-               & wv1  & wv2  & wv1  & wv2 \\
-    \hline 
-    clean      & 4.04 & 6.76 & 5.03& 7.53 \\
-    airport    & 7.44 & 15.36& 8.22& 16.03\\
-    babble     & 7.86 & 15.88& 9.06& 17.82\\
-    car        & 4.17 & 8.99 & 5.21& 9.81 \\
-    restaurant & 9.25 & 17.32& 12.2& 19.60\\
-    street     & 7.79 & 16.14& 9.34& 17.56\\
-    train      & 8.18 & 17.26& 9.60& 18.66\\
+    \begin{tabular}{r|cc}
+    %\multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
+    %           & wv1  & wv2  & wv1  & wv2 \\
+    Noise       &Invariant    &Baseline\\
     \hline
-    Average    & \multicolumn{2}{c}{10.46}& & 
+    1           &16.36*       &18.14 \\
+    2           &15.56*       &17.39 \\
+    3           &14.29        &14.67 \\
+    4           &13.61        &13.84 \\         
+    5           &13.41        &13.02 \\         
+    6           &12.62        &12.60 \\
+    \hline\hline
+    6, pre-train&11.88        &11.99
     \end{tabular}
     %TODO: add numbers!
 \end{table}
 
-\section{Conclusion}
+\section{Discussion}
+    We demonstrate that the invariance training helps to generalize to unseen noise
+    conditions and improves in 
+    
+    The task of speech recognition differs from the image recognition
+    adaptation in an aspect of the domain adaptation network training dynamics. 
+    While the most common problem for the GAN type of networks trained on images 
+    is overfitting, the noise type classification networks suffers from 
+    underfitting. This makes the gradient of the $L_3$ term in Eq.~\ref{eq:cost}
+    unrealiable and noisy. 
 
 
 \section*{Acknowledgments}
 
-We would like to thank Yaroslav Ganin, David Warde-Farley, Samuel Thomas for insightful discussions,
+We would like to thank Yaroslav Ganin, David Warde-Farley for insightful discussions,
 developers of Theano~\cite{2016arXiv160502688short}, Blocks, and Fuel~\cite{MerrienboerBDSW15} 
 for great instruments.
 
