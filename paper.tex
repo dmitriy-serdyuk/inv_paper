@@ -141,9 +141,14 @@
     in Section~\ref{sec:invariant-speech}. It is tightly connected to the idea
     of generative adversarial networks (GAN) proposed 
     in~\cite{goodfellow2014generative} thus we start with the discussion
-    on this type of generative networks in Section~\ref{sec:gans}
-
-    %TODO
+    on this type of generative networks in Section~\ref{sec:gans}, continue
+    with the description of the gradient reverse method in 
+    Section~\ref{sec:gradient-reverse}. Main contributions of this work
+    include the development of an acoustic model benefiting from invariant
+    representations constructed similarly to the gradient reverse method
+    (see Section~\ref{sec:invariant-speech}); and thorough experimentation
+    on a publicly available Aurora-4 dataset for noisy speech recognition 
+    (see Sectibn~\ref{sec:experiments}).
 
 \section{Generative Adversarial Networks}
 \label{sec:gans}
@@ -158,10 +163,8 @@
     between a generated image and a ``real'' image taken from the dataset. Thus
     the discriminator is just a classifier network with a sigmoid output
     and can be trained with the gradient methods. The main idea of the generative adversarial
-    training is that it is possible to propagate the gradient of the discriminator
+    training is the possibility to propagate the gradient of the discriminator
     network further to the generator network stacking them on top of each other.
-    This leads to an efficient training procedure and GANs achieved the state of the
-    art that time on handwritten digit generation MNIST dataset.
 
     In other words, these two networks are competing with each other the 
     generator is trying to deceive the discriminator network while it tries
@@ -219,8 +222,7 @@ recording conditions, speaker identity, or gener might be considred to be domain
 and adptation task corresponds to making the hidden layer representations be 
 invariant with respect to those conditions. We hypothesize that this method of
 training helps to generalize on unseen conditiions and requires only very small
-amount of labeling the conditions, see Section~\ref{sec:experiments} for experimental
-evaluation.
+amount of supervision -- the condition labels.  
 
 The model we use is depicted on Figure~\ref{fig:model}. It is a feedforward neural network
 which is trained to predict the HMM state tweaked with a branch for the invariance
@@ -265,8 +267,9 @@ changing the learning rate.
             conditions used for training. Bottom: Average performance on seen condition versus unseen.
             Testing was performed on all wv1 conditions.
             }
-        \label{fig:model}
-    \end{subfigure}%
+        \label{fig:results}
+    \end{subfigure}
+    \caption{Model and results.}
 \end{figure}
 
 \section{Related Work}
@@ -311,24 +314,9 @@ The results are summarized in Table~\ref{tab:results}.
 In our experiments we did not use layerwise pretraining not uncommonly used for small
 datasets due to the difficulties of combining it with the invariance training. Our preliminary
 experiments show that the network is not able to leave the parameter region it reaches after 
-pretraining.
-
-%\begin{figure}
-%    \centering
-%    \begin{subfigure}[b]{0.5\linewidth}
-%        \centering
-%        \includegraphics[width=\linewidth]{tsne-original.png}
-%    \end{subfigure}%
-%    \begin{subfigure}[b]{0.5\linewidth}
-%        \centering
-%        \includegraphics[width=\linewidth]{tsne-invariant.png}
-%    \end{subfigure}%
-%    \caption{t-SNE visualization of the last hidden layer using the clean development
-%    subset. On the left, the baseline
-%    model. On the right, the model trained with the adversarial objective. Colors 
-%    represent genders.}
-%    \label{fig:tsne}
-%\end{figure}
+pretraining. The Figure~\ref{fig:results} visualizes the average performance and the
+performance on seen conditions versus unseen. We conclude that the best performance
+gain can be acheived in the case of small amount of noisy samples in the training set.
 
 \begin{table}
     \centering
