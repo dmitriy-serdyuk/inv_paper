@@ -269,7 +269,7 @@ changing the learning rate.
             }
         \label{fig:results}
     \end{subfigure}
-    \caption{Model and results.}
+    \caption{Model structure and results.}
 \end{figure}
 
 \section{Related Work}
@@ -305,7 +305,7 @@ we performs 6 groups of experiments with different set of seen noises. We always
 on clean data and add noise conditions one-by-one in order: airport, babble, car, 
 restaurant, street, train. The last group includes all noises therefore matches the
 standard multi condition training setup. For every group of experiments we trained the
-baseline and the invariance model where we branch out at 4th layer to a logistic 
+baseline and the invariance model where we branch out at 4th layer to an  
 binary classifier clean versus noisy data. Due to the imballance between clean and
 noisy parts of the dataset, we had to oversample noisy frames, every minibatch contained
 half of clean and half of noisy data points.
@@ -346,7 +346,9 @@ gain can be acheived in the case of small amount of noisy samples in the trainin
 
 \section{Discussion}
     We demonstrate that the invariance training helps to generalize to unseen noise
-    conditions and improves in 
+    conditions and improves in the case of a small amount of training noise. Future
+    research on this topic includes experimentation with layerwise pretraining,
+    more architecture exploration, and the form of the invariance promotion cost term. 
     
     The task of speech recognition differs from the image recognition
     adaptation in an aspect of the domain adaptation network training dynamics. 
