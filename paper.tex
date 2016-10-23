@@ -163,7 +163,7 @@
         \min_G \max_D V(D, G) = \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + 
             \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
     \end{align*}
-    The maximization over the discriminator $D$ forms a usuall cross-entropy objective, the gradients are
+    The maximization over the discriminator $D$ forms a usual cross-entropy objective, the gradients are
     computed with respect to the parameters of $D$. The parameters of $G$ are minimized using the gradients
     propagated through the second term. The minimization over $G$ makes it to produce examples which $D$
     classifiers as the training ones.
@@ -197,10 +197,10 @@
     \end{equation}
     where $y$ is the ground truth class, $d$ is the domain label, corresponding
     hat variables are the network predictions, and $\theta_E, \theta_R$ and $\theta_D$ are the subsets of  parameters for the encoder,
-    recogniser and the domain classifier networks respectively. The hyper-parameters
+    recognizer and the domain classifier networks respectively. The hyper-parameters
     $\alpha$ and $\beta$ denote the relative influence of the loss functions terms.
 
-\subsection{Invariant Representions for Speech Recognition}
+\subsection{Invariant Representations for Speech Recognition}
 \label{sec:invariant-speech}
 
 This work focuses on speech recognition using DNN-HMM hybrid systems. The context dependent (CD) HMM states are the class labels of interest. The
@@ -209,7 +209,7 @@ invariant with respect to these domains. We hypothesize that this adversarial me
 training helps the CD state classifier to generalize better to unseen domain conditions and requires only a  
 small additional amount of supervision, i.e. the domain labels.  
 
-Figure~\ref{fig:model} depicts the model, which is same as the model for the gradient reverse method presented in the previous section. It is a feedforward neural network trained to predict the CD HMM state, with a branch that predicts the domain (noise condition). This branch is discarded in the testing phase. In our experiments we
+Figure~\ref{fig:model} depicts the model, which is same as the model for the gradient reverse method presented in the previous section. It is a feed-forward neural network trained to predict the CD HMM state, with a branch that predicts the domain (noise condition). This branch is discarded in the testing phase. In our experiments we
 used the noise condition as the domain label merging all noise types into one label
 and clean as the other label. Our training loss function is
     \begin{equation}
@@ -342,7 +342,7 @@ experiments on a pre-trained network when using all noise types (last row of Tab
 
 \section{Discussion}
     This paper presents the application of generative adversarial networks and invariance training for noise robust speech recognition. We show that invariance training helps the ASR system to generalize to better to unseen noise
-    conditions and improves word error rate in when a small number of noise types are seen during trainings. Future
+    conditions and improves word error rate in when a small number of noise types are seen during training. Future
     research on this topic includes experimentation with layer-wise pre-training,
     exploring alternative network architectures and invariance-promoting loss functions
         
@@ -351,7 +351,7 @@ experiments on a pre-trained network when using all noise types (last row of Tab
     Our experiments show that in contrast to the image recognition task,
     the task of speech recognition,  the domain adaptation network suffers from
     the underfitting. Therefore, the gradient of the $L_3$ term in Eq.~\ref{eq:cost}
-    unrealiable and noisy. This aspect needs further development.
+    unreliable and noisy. This aspect needs further development.
 
 
 \section*{Acknowledgments}
