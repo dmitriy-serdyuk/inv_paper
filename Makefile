@@ -1,6 +1,6 @@
 all: paper.pdf
 
-paper.pdf: paper.tex refs.bib model.pdf
+paper.pdf: paper.tex refs.bib model.pdf wer_avg.pdf wer_seen_unseen.pdf
 	pdflatex paper.tex
 	bibtex paper
 	pdflatex paper.tex

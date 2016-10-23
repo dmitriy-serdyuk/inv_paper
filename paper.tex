@@ -99,11 +99,7 @@
     network taking the intermediate representation as the input.
     This work focuses on investigation of neural architectures which produce
     representations invariant to certain conditions as the noise type for speech
-    recognition. Similar
-    to the Ganin et al. work we train the intermediate representation to be invariant
-    to noise conditions training three neural networks: the encoder, the recognizer, and the
-    noise classifier to produce the representation produced by the encoder to decrease
-    the performance of the classifier making the representation invariant to noise conditions. We
+    recognition.  We
     experimentally evaluate proposed architectures on the acoustic modelling task
     for speech recognition on a popular benchmark Aurora-4.
 \end{abstract}
@@ -250,7 +246,7 @@ changing the learning rate.
 \begin{figure}
     \centering
     \captionsetup[subfigure]{oneside,margin={0.3cm,0cm}}
-    \begin{subfigure}[b]{0.4\linewidth}
+    \begin{subfigure}[b]{0.3\linewidth}
         \centering
         \includegraphics[width=0.9\linewidth]{model.pdf}
         \caption{The model consists of three neural networks. The encoder $E$ produces
@@ -261,7 +257,7 @@ changing the learning rate.
         recognition task.}
         \label{fig:model}
     \end{subfigure}%
-    \begin{subfigure}[b]{0.6\linewidth}
+    \begin{subfigure}[b]{0.7\linewidth}
         \centering
         \includegraphics[width=\linewidth]{wer_avg.pdf}
         \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
