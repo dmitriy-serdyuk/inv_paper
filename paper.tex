@@ -249,14 +249,28 @@ changing the learning rate.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.3\linewidth]{model.pdf}
-    \caption{The model consists of three neural networks. The encoder $E$ produces
-    the intermediate representation $h$ which used in the recognizer $R$ and 
-    in the discriminator $D$. The hidden representation $h$ is trained to improve
-    the recognition and minimize the discrimination accuracy. The discriminator
-    is a classifier trained to maximize its accuracy on the gender or the noise type
-    recognition task.}
-    \label{fig:model}
+    \captionsetup[subfigure]{oneside,margin={0.3cm,0cm}}
+    \begin{subfigure}[b]{0.4\linewidth}
+        \centering
+        \includegraphics[width=0.9\linewidth]{model.pdf}
+        \caption{The model consists of three neural networks. The encoder $E$ produces
+        the intermediate representation $h$ which used in the recognizer $R$ and 
+        in the discriminator $D$. The hidden representation $h$ is trained to improve
+        the recognition and minimize the discrimination accuracy. The discriminator
+        is a classifier trained to maximize its accuracy on the gender or the noise type
+        recognition task.}
+        \label{fig:model}
+    \end{subfigure}%
+    \begin{subfigure}[b]{0.6\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{wer_avg.pdf}
+        \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
+        \caption{Up: Average performance of the model depending on the number of noise
+            conditions used for training. Bottom: Average performance on seen condition versus unseen.
+            Testing was performed on all wv1 conditions.
+            }
+        \label{fig:model}
+    \end{subfigure}%
 \end{figure}
 
 \section{Related Work}
@@ -324,23 +338,24 @@ pretraining.
     \centering
     \caption{Average word error rate (WER\%) on Aurora-4 dataset on all test conditions,
         including seen and unseen noise and unseen microphone. First column
-        is the number of noise conditions used for the training set. The last row is a 
+        is the number of noise conditions used for the training. The last row is a 
         preliminary experiment with layer-wise pretraining close to state-of-the-art
         model and a corresponding invariance training starting with a pretrained model.}
     \label{tab:results}
-    \begin{tabular}{r|cc}
+    \begin{tabular}{r|cc||cc|cc|cc|cc}
     %\multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
     %           & wv1  & wv2  & wv1  & wv2 \\
-    Noise       &Invariant    &Baseline\\
+        Noise       &Inv&BL&  \multicolumn{2}{c|}{A} & \multicolumn{2}{c|}{B} & \multicolumn{2}{c|}{C} & \multicolumn{2}{c}{D}\\
+               & & &  Inv & BL & Inv & BL & Inv & BL & Inv & BL\\
     \hline
-    1           &16.36*       &18.14 \\
-    2           &15.56*       &17.39 \\
-    3           &14.29        &14.67 \\
-    4           &13.61        &13.84 \\         
-    5           &13.41        &13.02 \\         
-    6           &12.62        &12.60 \\
+    1           &16.36        &18.14 &6.54&7.57    &12.71& 14.09   & 11.45&   13.10    & 22.47 &   24.80    \\
+    2           &15.56        &17.39 &5.90&  6.58 &   11.69   &13.28   &11.12   &13.51   &21.79   &23.96 \\
+    3           &14.24        &14.67 &5.45 & 5.08&    10.76&   12.44&   9.75&    9.84 &   19.93&   19.30\\
+    4           &13.61        &13.84 & 5.08 &5.29    &9.73    &9.97    &9.49    &9.56    &19.49   &19.90\\         
+    5           &13.41        &13.02 & 5.12 &5.34    &9.52    &9.42    &9.55    &8.67    &19.33   &18.65\\         
+    6           &12.62        &12.60 & 4.80 &4.61    &9.04    &8.86    &8.76    &8.59    &18.16   &18.21\\
     \hline\hline
-    6, pre-train&11.88        &11.99
+    6* &11.88        &11.99
     \end{tabular}
     %TODO: add numbers!
 \end{table}
