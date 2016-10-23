@@ -163,27 +163,27 @@
         \min_G \max_D V(D, G) = \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + 
             \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
     \end{align*}
-	{\bf Please explain how the min-max applies to the two terms. I assume that we are maximizing first term with respect to D and doing min over D/max over G for the second term. Hence maximizing the first term increases the likelihood of the discriminator output (single sigmoid neuron) for true training data. Maximizing the second term decreases the likelihood of the discriminator output for fake training data. But then, what does the min over G mean? That you are maximizing the generator likelihood of the fake data?}
-  
-    In practice, GANs might be hard to train due to the fact that when 
-    the discriminator is more powerful that the generator, the latter doesn't 
-    receive any gradient and thus can not be improved. One way to solve this problem is to
-    use a smart schedule which stops trainign the discriminator as soon as it
-    is much better trained than the generator. Other possible solutions include ``soft''
-    targets for the discriminator and using a 
-    different proxy for the cost {\bf I don't understand different proxy for the cost}.
-
+    The maximization over the discriminator $D$ forms a usuall cross-entropy objective, the gradients are
+    computed with respect to the parameters of $D$. The parameters of $G$ are minimized using the gradients
+    propagated through the second term. The minimization over $G$ makes it to produce examples which $D$
+    classifiers as the training ones.
+	%{\bf Please explain how the min-max applies to the two terms. I assume that we are maximizing first term with respect to D and doing min over D/max over G for the second term. Hence maximizing the first term increases the likelihood of the discriminator output (single sigmoid neuron) for true training data. Maximizing the second term decreases the likelihood of the discriminator output for fake training data. But then, what does the min over G mean? That you are maximizing the generator likelihood of the fake data?}
+    % Dima: deleted paragraph and explained min-max
+    
 \section{Gradient Reverse Method}
 \label{sec:gradient-reverse}
 
-    {\bf We need to write a couple of sentences on how this is motivated by GAN.} Prior work by~\cite{ganin2014unsupervised} proposed a method of training a network 
+    %{\bf We need to write a couple of sentences on how this is motivated by GAN.} 
+    %Dima: added a sentence at the end of this paragraph
+    Prior work by~\cite{ganin2014unsupervised} proposed a method of training a network 
     which can be adapted to new domains. The training set consists of the images
     labeled with classes of interest and separate domain labels. For example, the domain may refer to image background. The testing set does not need
     to have the domain labels. The network has a fork-like structure: the image is fed to the
     first network which produces a hidden representation $h$. Then this representation $h$ is input to two separate networks: a domain classifier network (D) and 
     a target classifier network (R). The goal of training is to learn the hidden 
     representation that is invariant to the domain labels and performs well on the target classification task, so that the domain information doesn't 
-    interfere with the target classifier at test time.
+    interfere with the target classifier at test time. Like the GAN objective forces the generation distribution be close to the data distribution,
+    the gradient reverse method makes domain distributions similar to each other.
 
     The network is trained with three goals: the hidden representation $h$ should
     be helpful for the target classifier, harmful for the domain classifier,
@@ -251,7 +251,16 @@ For simplicity, we use only a single hyper-parameter - the weight of the third t
 \end{figure}
 
 \section{Related Work}
-    Earlier approaches include various works on denoising including 
+    Generative adversarial networks were proposed and experimentally evaluated 
+    in~\cite{goodfellow2014generative}. This work was continued 
+    in work of~\cite{radford2015unsupervised}, which proposes several practical guidelines
+    for training GANs. This direction is further explored in~\cite{salimans2016improved}.
+
+    The conditioned GAN for generation task were utilized in~\cite{denton2015deep}. This
+    work proposes to improve images increasing the resolution step-by-step. 
+    The domain adaptation with the gradient reverse method was proposed in~\cite{ganin2014unsupervised}.
+
+    %TODO: cite denoising papers? some work on aurora 4?
 
     In a work~\cite{yusuke2016adversarial} an acoustic model trained in an adversarial fashion is
     applied to an in-house dataset based on Wall Street Journal 1 corrupted with additive noise.
@@ -264,7 +273,10 @@ We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-r
 on the Aurora-4~\cite{parihar2002aurora} noisy speech recognition dataset. Aurora-4
 is based on the Wall Street Journal corpus (WSJ0). It contains noises of 
 six categories which was added to clean
-data. Every clean and noisy utterance is filtered to simulate sampling frequency {\bf simulate sampling frequency?}. The training
+data. Every clean and noisy utterance is filtered to simulate the frequency characteristics of the sampling frequency. 
+% Dima: is it correct now?
+%
+The training
 set contains approximately 4400 clean utterances and 446 utterances of each noise condition,
 i.e. a total of 2676 noisy utterances.
 The testing
@@ -326,12 +338,12 @@ experiments on a pre-trained network when using all noise types (last row of Tab
     research on this topic includes experimentation with layer-wise pre-training,
     exploring alternative network architectures and invariance-promoting loss functions
         
-    {\bf We need to make the message of this paragraph more clear.}The task of speech recognition differs from the image recognition
-    adaptation in an aspect of the domain adaptation network training dynamics. 
-    While the most common problem for the GAN type of networks trained on images 
-    is overfitting, the noise type classification networks suffers from 
-    underfitting. This makes the gradient of the $L_3$ term in Eq.~\ref{eq:cost}
-    unrealiable and noisy. 
+    %{\bf We need to make the message of this paragraph more clear.}
+    % Dima: tried to fix -- it is differnt => needs more investigation
+    Our experiments show that in contrast to the image recognition task,
+    the task of speech recognition,  the domain adaptation network suffers from
+    the underfitting. Therefore, the gradient of the $L_3$ term in Eq.~\ref{eq:cost}
+    unrealiable and noisy. This aspect needs further development.
 
 
 \section*{Acknowledgments}
