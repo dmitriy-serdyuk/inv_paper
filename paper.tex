@@ -193,6 +193,7 @@
         L = L(\hat{y}, y; \theta_R, \theta_E) + 
         \alpha L(\hat{d}, d; \theta_D) -
         \beta L(\hat{d}, d; \theta_E),
+        \label{eq:grm}
     \end{equation}
     where $y$ is the ground truth class, $d$ is the domain label, corresponding
     hat variables are the network predictions, and $\theta_E, \theta_R$ and $\theta_D$ are the subsets of  parameters for the encoder,
@@ -218,7 +219,10 @@ and clean as the other label. Our training loss function is
         \label{eq:cost}
     \end{equation}
 where $L_3 = - d\log(1 - \hat{d}) - (1-d)\log(\hat{d})$ maximizes the probability
-of an incorrect domain classification {\bf Contrast this with term 3 of the original gradient reverse equation.}. The terms $L_1$ and $L_2$ are 
+of an incorrect domain classification in contrast to the Eq.~\ref{eq:grm} where the 
+correct classification is minimized.
+%{\bf Contrast this with term 3 of the original gradient reverse equation.}. 
+The terms $L_1$ and $L_2$ are 
 regular cross-entropies which are minimized with corresponding parameters $\theta_E$ and $\theta_D$.
 For simplicity, we use only a single hyper-parameter - the weight of the third term.
 
