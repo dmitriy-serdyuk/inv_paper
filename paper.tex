@@ -111,7 +111,7 @@
     accents and types of background noises. Furthermore, even if the test scenarios are seen during training, there can be significant variability in their statistics. Thus, its important to develop ASR systems that are invariant to unseen acoustic conditions.
     %bhuv
     %Even in case all testing conditions have also appeared
-    i%n the training data, their acoustic statistics likely to be
+    %in the training data, their acoustic statistics likely to be
     %different. For this reason, it's important to develop ASR systems that are
     %robust towards such undesirable acoustic variabilities.
 
@@ -124,7 +124,18 @@
 %feature transformations, allows for greater flexibility in
     %constructing training objective functions that promote learning of noise invariant
     %representations.
-    Several model and feature based adaptation methods such as Maximum Likelihood Linear Regression (MLLR),  feature-based MLLR and iVectors~\cite{ivec} have been proposed to handle speaker variability; and Noise Adaptive Training (NAT)~\cite{msftnoise}  and Vector Taylor Series (VTS) to handle environment variability. With the increasing success of Deep Neural Network (DNN) acoustic models for ASR \cite{hinton2012deep, msft, ibm}, end-to-end systems are being proposed~\cite{essen, scatterTransforms, fromaudio} for modeling the acoustic conditions within a single network. This allows us to take advantage of the network's ability to learn highly non-linear feature transformations, with greater flexibility in constructing training objective functions that promote learning of noise invariant representations. The main idea of this work is to force the acoustic model to learn a representation invariant to noise conditions, instead of explicitly using noise robust acoustic features (Section~\ref{sec:invariant-speech}). This type of noise-invariant training requires noise-condition labels during training only. It is related to the idea of generative adversarial networks (GAN) and the gradient reverse method proposed in proposed  in~\cite{goodfellow2014generative}  and ~\cite{ganin2014unsupervised} respectively (Section~\ref{sec:relatedwork}). We present results on the Aurora-4 speech recognition task ( Section~\ref{sec:experiments} and summarize our findings in Section~\ref{sec:discussion}.
+    Several model and feature based adaptation methods such as Maximum Likelihood Linear Regression (MLLR),  feature-based MLLR 
+    and iVectors~\cite{ivec} have been proposed to handle speaker variability; and Noise Adaptive Training (NAT)~\cite{msftnoise}  
+    and Vector Taylor Series (VTS) to handle environment variability. With the increasing success of Deep Neural Network (DNN) 
+    acoustic models for ASR \cite{hinton2012deep, msft, ibm}, end-to-end systems are being proposed~\cite{essen, scatterTransforms, fromaudio} 
+    for modeling the acoustic conditions within a single network. This allows us to take advantage of the network's ability to learn 
+    highly non-linear feature transformations, with greater flexibility in constructing training objective functions that promote learning 
+    of noise invariant representations. The main idea of this work is to force the acoustic model to learn a representation invariant to 
+    noise conditions, instead of explicitly using noise robust acoustic features (Section~\ref{sec:invariant-speech}). This type of 
+    noise-invariant training requires noise-condition labels during training only. It is related to the idea of generative adversarial 
+    networks (GAN) and the gradient reverse method proposed in~\cite{goodfellow2014generative} and~\cite{ganin2014unsupervised} respectively 
+    (Section~\ref{sec:relatedwork}). We present results on the Aurora-4 speech recognition task in Section~\ref{sec:experiments} and summarize 
+    our findings in Section~\ref{sec:discussion}.
     
     %Since this work is tightly connected to the idea
     %f generative adversarial networks (GAN) proposed 
@@ -138,22 +149,21 @@
 
 \section{Related Work}
 \label{sec:relatedwork}
-{\bf Generative Adversarial Networks} consist of two networks: generator and discriminator. 
+\emph{Generative Adversarial Networks} consist of two networks: generator and discriminator. 
     %One of the most insightful recent developments in the area of generative models
     %is the family of generative adversarial networks (GANs).
     %A GAN consists of two networks: generator and discriminator. 
     The generator network $G$ has an
-    input of randomly-generated feature vectors and is asked to produce data, e.g. an image, 
+    input of randomly-generated feature vectors and is asked to produce a sample, e.g. an image, 
     similar to the images in the training set. The discriminator network $D$
     can either receive a generated image from the generator $G$ or an image
     from the training set. Its task is to distinguish
     between the ``fake'' generated image and the ``real'' image taken from the dataset. Thus,
     the discriminator is just a classifier network with a sigmoid output layer
-    and can be trained with gradient backpropagation. 
+    and can be trained with gradient backpropagation. This gradient can be propagated further
+    to the generator network.
 
-    The main idea of generative adversarial
-    training is to stack the discriminator and generator network on top of each other and propagate the gradient of the discriminator
-    network further to the generator network. In other words, these two networks are competing with each other. The 
+    Two networks in the GAN setup are competing with each other: the 
     generator is trying to deceive the discriminator network, while the discriminator tries
     to do its best to recognize if there was a deception, similar to adversarial game-theoretic settings.    
     Formally, the objective function of GAN training is
@@ -165,6 +175,9 @@
     computed with respect to the parameters of $D$. The parameters of $G$ are minimized using the gradients
     propagated through the second term. The minimization over $G$ makes it to produce examples which $D$
     classifiers as the training ones.
+
+    Several practical guidelines were proposed for optimizing GANs in~\cite{radford2015unsupervised} and 
+    further explored in~\cite{salimans2016improved}.
 	%{\bf Please explain how the min-max applies to the two terms. I assume that we are maximizing first term with respect to D and doing min over D/max over G for the second term. Hence maximizing the first term increases the likelihood of the discriminator output (single sigmoid neuron) for true training data. Maximizing the second term decreases the likelihood of the discriminator output for fake training data. But then, what does the min over G mean? That you are maximizing the generator likelihood of the fake data?}
     % Dima: deleted paragraph and explained min-max
     
@@ -180,21 +193,21 @@
     labeled with classes of interest and separate domain (image background) labels. 
     %For example, the domain may refer to image background. The testing set does not need
    % to have the domain labels. 
-   The network has a fork-like structure: the image is fed to the
+    The network has a $Y$-like structure: the image is fed to the
     first network which produces a hidden representation $h$. Then this representation $h$ is input to two separate networks: a domain classifier network (D) and 
     a target classifier network (R). The goal of training is to learn the hidden 
     representation that is invariant to the domain labels and performs well on the target classification task, so that the domain information doesn't 
     interfere with the target classifier at test time. Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
-    the {\bf gadient reverse method} makes domain distributions similar to each other.
+    the \emph{gadient reverse method} makes domain distributions similar to each other.
 
     The network is trained with three goals: the hidden representation $h$ should
     be helpful for the target classifier, harmful for the domain classifier,
     and the domain classifier should have a good classification accuracy. More 
     formally, the authors define the loss function as
     \begin{equation}
-        L = L(\hat{y}, y; \theta_R, \theta_E) + 
-        \alpha L(\hat{d}, d; \theta_D) -
-        \beta L(\hat{d}, d; \theta_E),
+        L = L_1(\hat{y}, y; \theta_R, \theta_E) + 
+        \alpha L_2(\hat{d}, d; \theta_D) -
+        \beta L_3(\hat{d}, d; \theta_E),
         \label{eq:grm}
     \end{equation}
     where $y$ is the ground truth class, $d$ is the domain label, corresponding
@@ -204,7 +217,7 @@
 
 %% Denoising Auto encoder and
 
-The influence of representations produced by a neural network to internal noise reduction is discussed in~\cite{yu2013feature} and this work sets a baseline for experiments on  Aurora-4 dataset. Recently, in~\cite{yusuke2016adversarial} a multilayer sigmoidal network is trained in an adversarial fashion on a in-house transcription task corrupted by noise.
+The influence of representations produced by a neural network to internal noise reduction is discussed in~\cite{yu2013feature} and this work sets a baseline for experiments on  Aurora-4 dataset. Recently, in~\cite{yusuke2016adversarial} a multilayer sigmoidal network is trained in an adversarial fashion on an in-house transcription task corrupted by noise.
     %% STILL TODO
     %{\bf Need to call out differences from this work: (1) We use the standard Aurora-4 training/testing conditions. (2) We also show the impact of seeing different number of noise types during training. (3) ...}
 \section{Invariant Representations for Speech Recognition}
@@ -218,14 +231,8 @@ small additional amount of supervision, i.e. the domain labels.
 
 Figure~\ref{fig:model} depicts the model, which is same as the model for the gradient reverse method. It is a feed-forward neural network trained to predict the CD HMM state, with a branch that predicts the domain (noise condition). This branch is discarded in the testing phase. In our experiments we
 used the noise condition as the domain label merging all noise types into one label
-and clean as the other label. Our training loss function is
-    \begin{equation}
-        L = L_1(\hat{y}, y; \theta_R, \theta_E) + 
-        L_2(\hat{d}, d; \theta_D) +
-        \beta L_3(\hat{d}, d; \theta_E),
-        \label{eq:cost}
-    \end{equation}
-where $L_3 = - d\log(1 - \hat{d}) - (1-d)\log(\hat{d})$ maximizes the probability
+and clean as the other label. Our training loss function is  Eq.~\ref{eq:grm} with $\alpha$ set to 1 and
+$L_3$ to $-d\log(1 - \hat{d}) - (1-d)\log(\hat{d})$. $L_3$ term maximizes the probability
 of an incorrect domain classification in contrast to the Eq.~\ref{eq:grm} where the 
 correct classification is minimized.
 %{\bf Contrast this with term 3 of the original gradient reverse equation.}. 
@@ -284,8 +291,8 @@ For simplicity, we use only a single hyper-parameter -- the weight of the third 
 
 \section{Experiments}
 \label{sec:experiments}
-We experimentally evaluate the approach discussed in Section~\ref{sec:gradient-reverse} 
-on the well-benchmarked Aurora-4~\cite{parihar2002aurora} noisy speech recognition task. Aurora-4
+We experimentally evaluate our approach   
+on the well-benchmarked Aurora-4 \citep{parihar2002aurora} noisy speech recognition task. Aurora-4
 is based on the Wall Street Journal corpus (WSJ0). It contains noises of 
 six categories which was added to clean data. Every clean and noisy utterance is filtered to simulate the frequency characteristics %%% of the sampling frequency. ?????  don;t follow % bhuv 
 % Dima: is it correct now?
@@ -298,7 +305,7 @@ The test set consists of clean data, data corrupted by 6 noise types, and data r
 For both clean and noisy data, we extract 40-dimensional Mel-filterbank features with their deltas and 
 delta-deltas spliced over $\pm$5 frames, resulting in 1320 input 
 features that are subsequently mean and variance normalized.  The baseline acoustic model is a  6-layer 
-DNN with 2048 rectified linear units at every layer. It is trained using momentum-accelerated stochastic gradient descent for 15 epochs witj new-bob annealing.
+DNN with 2048 rectified linear units at every layer. It is trained using momentum-accelerated stochastic gradient descent for 15 epochs with new-bob annealing.
 
 %We annealed the learning rate according 
 %to the development set cross-entropy, dividing it by 2 when the cross entropy did not improve.
@@ -348,7 +355,10 @@ Our preliminary experiments on a pre-trained network (better overall WER) when u
 
 \section{Discussion}
 \label{sec:discussion}
-    This paper presents the application of generative adversarial networks and invariance training for noise robust speech recognition. We show that invariance training helps the ASR system to generalize better to unseen noise conditions and improves word error rate when a small number of noise types are seen during training. Our experiments show that in contrast to the image recognition task, in speech recognition,  the domain adaptation network suffers from underfitting. Therefore, the gradient of the $L_3$ term in Eq.~\ref{eq:cost} is unreliable and noisy. Future research includes enhancements to the domain adaptation network while exploring alternative network architectures and invariance-promoting loss functions.
+    This paper presents the application of generative adversarial networks and invariance training for noise robust speech recognition. We show that invariance training 
+    helps the ASR system to generalize better to unseen noise conditions and improves word error rate when a small number of noise types are seen during training. Our 
+    experiments show that in contrast to the image recognition task, in speech recognition,  the domain adaptation network suffers from underfitting. Therefore, the 
+    gradient of the $L_3$ term in Eq.~\ref{eq:grm} is unreliable and noisy. Future research includes enhancements to the domain adaptation network while exploring alternative network architectures and invariance-promoting loss functions.
         
     %{\bf We need to make the message of this paragraph more clear.}
     % Dima: tried to fix -- it is differnt => needs more investigation
