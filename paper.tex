@@ -87,7 +87,7 @@
 \maketitle
 %
 \begin{abstract}
-    Modern automatic speech recognition (ASR) systems need to be robust under acoustic variability arising from environmental, speaker, channel and recording conditions. Ensuring such robustness to variability is a challenge in modern day neural network-based ASR systems, especially when all types of variability are not seen during training. We attempt to address this problem by encouraging the neural network acoustic model to learn invariant feature representations.
+    Modern automatic speech recognition (ASR) systems need to be robust under acoustic variability arising from environmental, speaker, channel, and recording conditions. Ensuring such robustness to variability is a challenge in modern day neural network-based ASR systems, especially when all types of variability are not seen during training. We attempt to address this problem by encouraging the neural network acoustic model to learn invariant feature representations.
     We use ideas from recent research on image generation using
     Generative Adversarial Networks and domain adaptation ideas extending
     adversarial gradient-based training. A recent work from Ganin et al. proposes to
@@ -125,9 +125,9 @@
     %constructing training objective functions that promote learning of noise invariant
     %representations.
     Several model and feature based adaptation methods such as Maximum Likelihood Linear Regression (MLLR),  feature-based MLLR 
-    and iVectors~\cite{ivec} have been proposed to handle speaker variability; and Noise Adaptive Training (NAT)~\cite{msftnoise}  
-    and Vector Taylor Series (VTS) to handle environment variability. With the increasing success of Deep Neural Network (DNN) 
-    acoustic models for ASR \cite{hinton2012deep, msft, ibm}, end-to-end systems are being proposed~\cite{essen, scatterTransforms, fromaudio} 
+    and iVectors~\citep{saon2013speaker} have been proposed to handle speaker variability; and Noise Adaptive Training \citep[NAT;][]{kalinli2010noise}
+    and Vector Taylor Series \citep[VTS;][]{un1998speech} to handle environment variability. With the increasing success of Deep Neural Network (DNN) 
+    acoustic models for ASR \citep{hinton2012deep,seide2011conversational,sainath2011making}, end-to-end systems are being proposed~\citep{miao2015eesen,sainath2015learning} 
     for modeling the acoustic conditions within a single network. This allows us to take advantage of the network's ability to learn 
     highly non-linear feature transformations, with greater flexibility in constructing training objective functions that promote learning 
     of noise invariant representations. The main idea of this work is to force the acoustic model to learn a representation invariant to 
@@ -198,7 +198,7 @@
     a target classifier network (R). The goal of training is to learn the hidden 
     representation that is invariant to the domain labels and performs well on the target classification task, so that the domain information doesn't 
     interfere with the target classifier at test time. Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
-    the \emph{gadient reverse method} makes domain distributions similar to each other.
+    the \emph{gradient reverse method} makes domain distributions similar to each other.
 
     The network is trained with three goals: the hidden representation $h$ should
     be helpful for the target classifier, harmful for the domain classifier,
@@ -232,8 +232,8 @@ small additional amount of supervision, i.e. the domain labels.
 Figure~\ref{fig:model} depicts the model, which is same as the model for the gradient reverse method. It is a feed-forward neural network trained to predict the CD HMM state, with a branch that predicts the domain (noise condition). This branch is discarded in the testing phase. In our experiments we
 used the noise condition as the domain label merging all noise types into one label
 and clean as the other label. Our training loss function is  Eq.~\ref{eq:grm} with $\alpha$ set to 1 and
-$L_3$ to $-d\log(1 - \hat{d}) - (1-d)\log(\hat{d})$. $L_3$ term maximizes the probability
-of an incorrect domain classification in contrast to the Eq.~\ref{eq:grm} where the 
+$L_3$ to $d\log(1 - \hat{d}) + (1-d)\log(\hat{d})$. $L_3$ term maximizes the probability
+of an incorrect domain classification in contrast to the gradient reverse where the 
 correct classification is minimized.
 %{\bf Contrast this with term 3 of the original gradient reverse equation.}. 
 The terms $L_1$ and $L_2$ are 
@@ -332,7 +332,7 @@ Our preliminary experiments on a pre-trained network (better overall WER) when u
     \caption{Average word error rate (WER\%) on Aurora-4 dataset on all test conditions,
         including seen and unseen noise and unseen microphone. First column
         is the number of noise conditions used for the training. The last row is a 
-        preliminary experiment with layer-wise pretraining close to state-of-the-art
+        preliminary experiment with layer-wise pre-training close to state-of-the-art
         model and a corresponding invariance training starting with a pretrained model.}
     \label{tab:results}
     \begin{tabular}{r|cc||cc|cc|cc|cc}
