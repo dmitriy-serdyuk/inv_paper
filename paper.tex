@@ -226,11 +226,11 @@ small additional amount of supervision, i.e. the domain labels.
 
 Figure~\ref{fig:model} depicts the model, which is same as the model for the gradient reverse method. It is a feed-forward neural network trained to predict the CD HMM state, with a branch that predicts the domain (noise condition). This branch is discarded in the testing phase. In our experiments we
 used the noise condition as the domain label merging all noise types into one label
-and clean as the other label. Our training loss function is  Eq.~\ref{eq:grm} with $\alpha$ set to 1 and
-$L_3$ to $d\log(1 - \hat{d}) + (1-d)\log(\hat{d})$. $L_3$ term maximizes the probability
+and clean as the other label. Our training loss function is Eq.~\ref{eq:grm} with 
+$L_3$ set to $d\log(1 - \hat{d}) + (1-d)\log(\hat{d})$ for stability during training. 
+$L_3$ term maximizes the probability
 of an incorrect domain classification in contrast to the gradient reverse where the 
 correct classification is minimized.
-%{\bf Contrast this with term 3 of the original gradient reverse equation.}. 
 The terms $L_1$ and $L_2$ are 
 regular cross-entropies which are minimized with corresponding parameters $\theta_E$ and $\theta_D$.
 For simplicity, we use only a single hyper-parameter -- the weight of the third term.
@@ -255,7 +255,7 @@ For simplicity, we use only a single hyper-parameter -- the weight of the third 
         \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
         \caption{Up: Average performance of the baseline multi-condition and invariance model varying with  the number of noise
             conditions used for training. Bottom: Average performance on seen versus unseen noise conditions.
-            Testing was performed on all wv1 conditions.
+            Testing was performed on all wv1 conditions (Sennheiser microphone).
             }
         \label{fig:results}
     \end{subfigure}
@@ -300,7 +300,8 @@ The test set consists of clean data, data corrupted by 6 noise types, and data r
 For both clean and noisy data, we extract 40-dimensional Mel-filterbank features with their deltas and 
 delta-deltas spliced over $\pm$5 frames, resulting in 1320 input 
 features that are subsequently mean and variance normalized.  The baseline acoustic model is a  6-layer 
-DNN with 2048 rectified linear units at every layer. It is trained using momentum-accelerated stochastic gradient descent for 15 epochs with new-bob annealing.
+DNN with 2048 rectified linear units at every layer. It is trained using momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
+annealing~\citep[as in][]{morgan1995continuous,sainath2011making}.
 
 %We annealed the learning rate according 
 %to the development set cross-entropy, dividing it by 2 when the cross entropy did not improve.
