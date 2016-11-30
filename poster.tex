@@ -146,29 +146,21 @@
 \begin{block}{Introduction}
     \begin{itemize}
         \item 
-    Modern automatic speech recognition (ASR) systems need to be robust under 
-    acoustic variability arising from environmental, speaker, channel, and recording 
-    conditions. Ensuring such robustness to variability is a challenge in modern day 
+            \textcolor{dblue}{Robustness} to the acoustic variability arising from environmental, speaker, channel, 
+    and recording 
+    conditions is a challenge in modern day 
     neural network-based ASR systems, especially when all types of variability are 
     not seen during training. 
     
         \item We attempt to address this problem by encouraging the 
-    neural network acoustic model to learn invariant feature representations.
+            neural network acoustic model to learn \textcolor{dblue}{invariant} feature representations.
         
         \item We use ideas from recent research on image generation using
-    Generative Adversarial Networks and domain adaptation ideas extending
-    adversarial gradient-based training. A recent work from Ganin et al. proposes to
-    use adversarial training for image domain adaptation by using an intermediate
-    representation from the main target classification network to deteriorate the 
-    domain 
-    classifier performance through a separate neural network.
-    Our work focuses on investigating neural architectures which produce
-    representations invariant to noise conditions for ASR.  
+            \textcolor{dblue}{generative adversarial networks} and domain adaptation ideas extending
+    adversarial gradient-based training.  
         \item We evaluate the proposed 
     architecture on the Aurora-4 task, a popular benchmark for
-    noise robust ASR. We show that our method generalizes better than the standard 
-    multi-condition training especially when only a few noise categories are seen 
-    during training.
+    noise robust ASR. 
     \end{itemize}
 
 \end{block}
@@ -188,7 +180,7 @@
         \item The discriminator network $D$
     can either receive a generated image from the generator $G$ or an image
     from the training set. Its task is to distinguish
-    between the ``fake'' generated image and the ``real'' image taken from the dataset~\cite{goodfellow2014generative}. 
+    between the ``fake'' generated image and the ``real'' image taken from the dataset~\cite{goodfellow2014generative}:
     \begin{align*}
         \min_G \max_D V(D, G) = & \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
             & \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
@@ -199,11 +191,7 @@
 
     \begin{block}{Domain Adaptation with Reverse Gradient}
         \begin{itemize}
-            \item 
-            Prior work by~\cite{ganin2014unsupervised} proposed a method of training a network 
-            which can be adapted to new domains.  
-
-            \item $Y$-like network: the image is fed to the
+            \item \cite{ganin2014unsupervised} proposes $Y$-shaped network: the image is fed to the
             encoder network ($E$) which produces a hidden representation $h$. 
             
             \item This representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
