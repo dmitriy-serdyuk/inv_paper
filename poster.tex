@@ -187,25 +187,29 @@
     \end{align*}
 
     \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{gan.pdf}
+    \end{figure}
+\end{block}
 
 
-    \begin{block}{Domain Adaptation with Reverse Gradient}
-        \begin{itemize}
-            \item \cite{ganin2014unsupervised} proposes $Y$-shaped network: the image is fed to the
-            encoder network ($E$) which produces a hidden representation $h$. 
-            
-            \item This representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
-            a target classifier network ($R$). 
-            
-            \item The goal of training is to learn the hidden 
-            representation that is invariant to the domain labels and performs well on the target classification 
-            task. 
-            
-            \item Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
-            the \emph{gradient reverse method} makes domain distributions similar to each other.
-        \end{itemize}
+\begin{block}{Domain Adaptation with Reverse Gradient}
+    \begin{itemize}
+        \item \cite{ganin2014unsupervised} proposes $Y$-shaped network: the image is fed to the
+        encoder network ($E$) which produces a hidden representation $h$. 
         
-    \end{block}
+        \item This representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
+        a target classifier network ($R$). 
+        
+        \item The goal of training is to learn the hidden 
+        representation that is invariant to the domain labels and performs well on the target classification 
+        task. 
+        
+        \item Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
+        the \textcolor{dblue}{gradient reverse method} makes domain distributions similar to each other.
+    \end{itemize}
+    
 \end{block}
 
 \end{column} % End of the first column
