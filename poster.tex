@@ -297,23 +297,31 @@
             \end{block}
 
             \begin{block}{{\Large Experiments on Aurora-4}}
-                In order to evaluate the impact of our method on generalization to unseen noises,
-                we performed 6 experiments with different set of seen noises. The networks are trained
+                \begin{itemize}
+                    \item We performed 6 experiments with different set of seen noises. 
+                    \item The networks are trained
                 on clean data, with each noise condition added one-by-one in the following order: airport, babble, car, 
-                restaurant, street, and train.
+                restaurant, street, and train:
+                    \begin{enumerate}
+                        \item clean + airport
+                        \item clean + airport + babble
+                        \item \ldots
+                    \end{enumerate}
+                \end{itemize}
 
-                Average performance of the baseline multi-condition and invariance model varying with the 
-                number of noise conditions used for training. Average performance on seen versus 
-                unseen noise conditions.
-                Testing was performed on all wv1 conditions (Sennheiser microphone).
                 \begin{figure}
                     \centering
                     \includegraphics[width=\linewidth]{wer_avg.pdf}
                 \end{figure}
+                Average performance of the baseline multi-condition and invariance model varying with the 
+                number of noise conditions used for training. 
                 \begin{figure}
                     \centering
                     \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
                 \end{figure}
+                Average performance on seen versus 
+                unseen noise conditions.
+                Testing was performed on all wv1 conditions (Sennheiser microphone).
             \end{block}
         \end{column} % end of third column
     \end{columns}
