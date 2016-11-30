@@ -180,15 +180,18 @@
 
 \begin{block}{Generative Adversarial Networks}
     \begin{itemize}
+        \item Two networks: the generator and the discriminator.
         \item The generator network $G$ has an
     input of randomly-generated feature vectors and is asked to produce a sample, e.g. an image, 
-    similar to the images in the training set. The discriminator network $D$
+    similar to the images in the training set. 
+    
+        \item The discriminator network $D$
     can either receive a generated image from the generator $G$ or an image
     from the training set. Its task is to distinguish
     between the ``fake'' generated image and the ``real'' image taken from the dataset~\cite{goodfellow2014generative}. 
     \begin{align*}
-        \min_G \max_D V(D, G) =& \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
-            &\mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
+        \min_G \max_D V(D, G) = & \mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
+            & \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
     \end{align*}
 
     \end{itemize}
@@ -196,20 +199,22 @@
 
     \begin{block}{Domain Adaptation with Reverse Gradient}
         \begin{itemize}
-    \item 
-    Prior work by~\cite{ganin2014unsupervised} proposed a method of training a network 
-    which can be adapted to new domains. The training data consists of the images
-    labeled with classes of interest and separate domain (image background) labels. 
-    %For example, the domain may refer to image background. The testing set does not need
-   % to have the domain labels. 
-    The network has a $Y$-like structure: the image is fed to the
-    first network which produces a hidden representation $h$. Then this representation $h$ is input to two separate networks: a domain classifier network (D) and 
-    a target classifier network (R). The goal of training is to learn the hidden 
-    representation that is invariant to the domain labels and performs well on the target classification task, so that the domain information doesn't 
-    interfere with the target classifier at test time. Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
-    the \emph{gradient reverse method} makes domain distributions similar to each other.
+            \item 
+            Prior work by~\cite{ganin2014unsupervised} proposed a method of training a network 
+            which can be adapted to new domains.  
 
-
+            \item $Y$-like network: the image is fed to the
+            encoder network ($E$) which produces a hidden representation $h$. 
+            
+            \item This representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
+            a target classifier network ($R$). 
+            
+            \item The goal of training is to learn the hidden 
+            representation that is invariant to the domain labels and performs well on the target classification 
+            task. 
+            
+            \item Similar to the GAN objective, which forces the generation distribution be close to the data distribution,
+            the \emph{gradient reverse method} makes domain distributions similar to each other.
         \end{itemize}
         
     \end{block}
@@ -226,10 +231,13 @@
         \begin{column}{\onecolwid} % The second column
             \begin{block}{{\Large Invariant Representation Network}}
                 \begin{itemize}
-                    \item The model consists of three neural networks. The encoder $E$ produces
+                    \item The model consists of three neural networks. 
+                    \item The encoder $E$ produces
                         the intermediate representation $h$ which used in the recognizer $R$ and 
-                        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
-                        the recognition and minimize the domain discriminator accuracy. The domain discriminator
+                        in the domain discriminator $D$. 
+                    \item The hidden representation $h$ is trained to improve
+                        the recognition and minimize the domain discriminator performance. 
+                    \item The domain discriminator
                         is a classifier trained to maximize its accuracy on the noise type
                         classification task.
                 \end{itemize}
@@ -295,7 +303,7 @@
                 restaurant, street, and train.
 
                 Average performance of the baseline multi-condition and invariance model varying with the 
-                number of noise conditions used for training. Bottom: Average performance on seen versus 
+                number of noise conditions used for training. Average performance on seen versus 
                 unseen noise conditions.
                 Testing was performed on all wv1 conditions (Sennheiser microphone).
                 \begin{figure}
@@ -358,7 +366,7 @@
 %----------------------------------------------------------------------------------------
 %	REFERENCES
 %----------------------------------------------------------------------------------
-\begin{block}{References}
+\begin{block}{Important References}
     \bibliographystyle{amsalpha}
     \bibliography{refs.bib}
 \end{block}
