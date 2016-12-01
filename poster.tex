@@ -114,7 +114,7 @@
 \addtobeamertemplate{headline}{} 
 {
 \begin{tikzpicture}[remember picture,overlay] 
-\node [shift={(-13 cm,-7cm)}] at (current page.north east)
+\node [shift={(-13 cm,-6cm)}] at (current page.north east)
 % \node [shift={(-10 cm,-5cm)}] at (current page.north west)
 {\includegraphics[height=7cm]{ibmpos_blue}}; 
 %\node [shift={(-42 cm,-11cm)}] at (current page.north)
@@ -172,7 +172,7 @@
 
 \begin{block}{Generative Adversarial Networks}
     \begin{itemize}
-        \item Two networks: the generator and the discriminator.
+        \item Two networks: the \textcolor{dblue}{generator} and the \textcolor{dblue}{discriminator}.
         \item The generator network $G$ has an
     input of randomly-generated feature vectors and is asked to produce a sample, e.g. an image, 
     similar to the images in the training set. 
@@ -196,13 +196,13 @@
 
 \begin{block}{Domain Adaptation with Reverse Gradient}
     \begin{itemize}
-        \item \cite{ganin2014unsupervised} proposes $Y$-shaped network: the image is fed to the
+        \item \cite{ganin2014unsupervised} proposes a $Y$-shaped network: the image is fed to the
         encoder network ($E$) which produces a hidden representation $h$. 
         
         \item This representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
         a target classifier network ($R$). 
         
-        \item The goal of training is to learn the hidden 
+        \item The goal of training is to learn a hidden 
         representation that is invariant to the domain labels and performs well on the target classification 
         task. 
         
@@ -223,10 +223,10 @@
         \begin{column}{\onecolwid} % The second column
             \begin{block}{{\Large Invariant Representation Network}}
                 \begin{itemize}
-                    \item The model consists of three neural networks. 
-                    \item The encoder $E$ produces
-                        the intermediate representation $h$ which used in the recognizer $R$ and 
-                        in the domain discriminator $D$. 
+                    \item Our model consists of three neural networks. 
+                    \item The \textcolor{dblue}{encoder} $E$ produces
+                        the intermediate representation $h$ which used in the \textcolor{dblue}{recognizer} $R$ and 
+                        in the \textcolor{dblue}{domain discriminator} $D$. 
                     \item The hidden representation $h$ is trained to improve
                         the recognition and minimize the domain discriminator performance. 
                     \item The domain discriminator
@@ -239,15 +239,17 @@
                     \beta L_3(\hat{d}, d; \theta_E)
                 \end{equation*}
 
+                \vspace{2cm}
                 \begin{figure}
                     \centering
-                    \includegraphics[width=0.9\linewidth]{model.pdf}
+                    \includegraphics[width=0.7\linewidth]{model.pdf}
                 \end{figure}
+                \vspace{2cm}
 
                 \begin{itemize}
                     \item The model is a DNN-HMM system with a feed-forward neural network trained to predict the 
                         CD HMM state (2000 classes).
-                    \item Input: 40-dimensional Mel-filterbank features with their deltas and 
+                    \item Input: 40-dimensional mel-filterbank features with their deltas and 
                         delta-deltas spliced over $\pm$5 frames (total dimension is 1320).
                     \item Baseline: 6-layer DNN with 2048 rectified linear units at every layer.
                     \item The right branch that predicts the domain (noise condition). This branch is discarded 
@@ -301,12 +303,14 @@
                     \end{enumerate}
                 \end{itemize}
 
+                \vspace{1cm}
                 \begin{figure}
                     \centering
                     \includegraphics[width=\linewidth]{wer_avg.pdf}
                 \end{figure}
                 Average performance of the baseline multi-condition and invariance model varying with the 
                 number of noise conditions used for training. 
+                \vspace{4cm}
                 \begin{figure}
                     \centering
                     \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
@@ -331,18 +335,18 @@
 \begin{table}
     \centering
     \label{tab:results}
-    \begin{tabular}{r|cc||cc|cc|cc|cc}
-        Noise       &Inv&BL&  \multicolumn{2}{c|}{A} & \multicolumn{2}{c|}{B} & \multicolumn{2}{c|}{C} & \multicolumn{2}{c}{D}\\
-        cond  & & &  Inv & BL & Inv & BL & Inv & BL & Inv & BL\\
+    \begin{tabular}{r|rr||rr|rr|rr|rr}
+        Noise       &&&  \multicolumn{2}{c|}{A} & \multicolumn{2}{c|}{B} & \multicolumn{2}{c|}{C} & \multicolumn{2}{c}{D}\\
+        cond  & Inv & BL &  Inv & BL & Inv & BL & Inv & BL & Inv & BL\\
     \hline
-    1           &16.36        &18.14 &6.54&7.57    &12.71& 14.09   & 11.45&   13.10    & 22.47 &   24.80    \\
-    2           &15.56        &17.39 &5.90&  6.58 &   11.69   &13.28   &11.12   &13.51   &21.79   &23.96 \\
-    3           &14.24        &14.67 &5.45 & 5.08&    10.76&   12.44&   9.75&    9.84 &   19.93&   19.30\\
-    4           &13.61        &13.84 & 5.08 &5.29    &9.73    &9.97    &9.49    &9.56    &19.49   &19.90\\         
-    5           &13.41        &13.02 & 5.12 &5.34    &9.52    &9.42    &9.55    &8.67    &19.33   &18.65\\         
-    6           &12.62        &12.60 & 4.80 &4.61    &9.04    &8.86    &8.76    &8.59    &18.16   &18.21\\
+    1           &\textcolor{dblue}{16.36}        &18.14 & 6.54  & 7.57    &12.71& 14.09   & 11.45&   13.10    & 22.47 &   24.80    \\
+        2           &\textcolor{dblue}{15.56}        &17.39 & 5.90  & 6.58    &   11.69   &13.28   &11.12   &13.51   &21.79   &23.96 \\
+        3           &\textcolor{dblue}{14.24}        &14.67 & 5.45  & 5.08    &   10.76&   12.44&   9.75&    9.84 &   19.93&   19.30\\
+        4           &\textcolor{dblue}{13.61}        &13.84 & 5.08  & 5.29    &9.73    &9.97    &9.49    &9.56    &19.49   &19.90\\         
+        5           &13.41        &\textcolor{dblue}{13.02} & 5.12  & 5.34    &9.52    &9.42    &9.55    &8.67    &19.33   &18.65\\         
+        6           &12.62        &\textcolor{dblue}{12.60} & 4.80  & 4.61    &9.04    &8.86    &8.76    &8.59    &18.16   &18.21\\
     \hline\hline
-    6*          &11.85        &11.99 &4.52    &4.76    &8.76    &8.76    &7.79    &8.57    &16.84&    16.99
+    6*          &\textcolor{dblue}{11.85}        &11.99 &4.52    &4.76    &8.76    &8.76    &7.79    &8.57    &16.84&    16.99
     \end{tabular}
 \end{table}
 \end{block}
