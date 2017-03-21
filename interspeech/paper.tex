@@ -140,12 +140,6 @@ reverse gradient
     similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
     to demonstrate the general direction of the gradient of the discriminator loss.
 
-    %TODO
-    % dima: I want to add something like this:
-    %Another point of view on the GAN training is that the generator is matching
-    %the distribution of the data with the distribution of the generator using
-    %a discriminator to provide the training signal. This approach can be generalized
-    %on any distributions to be matched.
     Optimization of the GAN objective corresponds to a minimization of the
     so-called Jenson-Shannon divergence between the data distribution and the
     distribution represented by the generator. This divergence is zero if and
@@ -344,7 +338,7 @@ on the well-benchmarked Aurora-4 \citep{parihar2002aurora} noisy speech recognit
 is based on the Wall Street Journal corpus (WSJ0). It contains noises of 
 six categories which were added to the clean data. Every clean and noisy
 utterance has been 
-filtered to simulate the phone quality recording using P.341 \citep{parihar2002aurora}. The training
+filtered to simulate the phone quality recording using P.341 \citep{pariharsignal}. The training
 data contains 4400 clean utterances and 446 utterances for each noise condition,
 i.e., a total of 2676 noisy utterances.
 The test set consists of clean data, data corrupted by 6 noise types, and data 
