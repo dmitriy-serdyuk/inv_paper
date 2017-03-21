@@ -199,16 +199,63 @@ reverse gradient
 \section{Related Work}
 \label{sec:relatedwork}
     %TODO
+    Neural networks display some robustness towards different recording
+    conditions and speaker by themselves and the effectiveness of representations
+    produced by a neural network for internal 
+    noise reduction is discussed by~\cite{yu2013feature}. This work sets a 
+    baseline for experiments on the Aurora-4 dataset.
 
-    The effectiveness of representations produced by a neural network for internal 
-    noise reduction is discussed by~\cite{yu2013feature} and this work sets a 
-    baseline for experiments on the Aurora-4 dataset. Recently, 
-    in a work by~\cite{yusuke2016adversarial} a multi-layer sigmoidal network was trained 
+    To be even more robust with respect to different recording conditions and speakers,
+    one can either aim to adapt the model parameters to these new situations or
+    to learn representations which are invariant to them.
+    Most approaches so far, are based on adaptation.
+    Unfortunately, many of the adaptation methods which have been designed for
+    GMM-HMM systems cannot be applied to DNN-based systems. For this reason, a
+    large body of recent work has investigated new adaptation methods for neural
+    networks.
+
+    Some of the linear and affine transformations used for GMM adaptation can
+    still be applied to neural networks when one limits these adaptations to the
+    very last layer, as was shown in~\cite{yao2012adaptation}. The
+    improvements seemed to rely mostly on the adaptation of the bias parameters.
+    A clear downside of this approach is that it doesn't utilize the
+    representational power provided by the non-linear multi-layer structure of deep
+    neural networks.
+
+    Many neural network speaker adaptation methods are based on
+    i-vectors. The most common way to exploit i-vectors is by providing them as additional
+    inputs \cite{senior2014improving,saon2013speaker}. This means that i-vectors also need to
+    be available during testing and this may not always be practical.
+
+    In the specific case of noise robustness, one can use speech enhancement to
+    obtain more robust features and neural networks have been used for this for
+    decades \cite{knecht1995neural}. A further step in this direction is to train
+    systems to recognize speech and perform speech enhancement jointly \cite{narayanan2014joint}. 
+    We argue that speech enhancement is a more difficult task to learn than
+    invariance to certain noise conditions and more likely to suffer from
+    overfitting when the amount of available noisy data is limited.
+
+    Another adaptation strategy is to retrain the model parameters using a very small
+    number of utterances from the new domain while making sure that the model
+    doesn't stray too far away from the parameter values that were obtained from
+    the train data \cite{yu2013kl}.
+    The adaptation to new domains can also be kept under control by limiting
+    the number of parameters which are adapted to the new data or by limiting the
+    adaptation to a rescaling of the hidden unit activations
+    \cite{swietojanski2014learning}.
+    The most important difference between these approaches and our work is that
+    we don't adapt the model parameters at all after training. In many
+    situations this may not be possible and retraining of models may require more
+    from the hardware on which the speech recognition system is implemented.
+
+    Recently, in a work by~\cite{yusuke2016adversarial} a multi-layer sigmoidal network was trained 
     in an adversarial fashion on an in-house transcription task corrupted by noise.
-
-    %TODO
-    \cite{saon2017english} use a form of adversarial training with a network
-    that predicts an i-vector using the mean square error loss.
+    This work is very similar to our approach but we evaluate our methods on
+    more challenging benchmark while investigating different numbers of noise
+    conditions. Our work also differs due to the use of more modern rectifier
+    activation based classification networks.
+    Finally, in other very recent work, \cite{saon2017english} a form of adversarial training with a network
+    that predicts an i-vector using the mean square error loss was used.
 
 \section{Invariant Representations for Speech Recognition}
 \label{sec:invariant-speech}
