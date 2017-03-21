@@ -94,8 +94,6 @@ reverse gradient
     recognition task in Section~\ref{sec:experiments} and summarize 
     our findings in Section~\ref{sec:discussion}.
 
-% This is more of an explanation of the method rather than a literature review.
-    % Perhaps we should change the section title.
 \section{Background}
 \label{sec:background}
 \begin{figure*}
@@ -167,6 +165,7 @@ reverse gradient
     similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
     to demonstrate the general direction of the gradient of the discriminator loss.
 
+    %TODO
     % dima: I want to add something like this:
     %Another point of view on the GAN training is that the generator is matching
     %the distribution of the data with the distribution of the generator using
@@ -331,8 +330,10 @@ features that were subsequently mean and variance normalized. The baseline
 acoustic model was a 6-layer 
 DNN with 2048 rectified linear units at every layer. It was trained using 
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
-annealing~\citep[half the learning rate if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
+annealing~\citep[the learning rate is halfed if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
+% TODO
+% dima: we need to emphasize that the unseen noises are very important
 To evaluate the impact of our method on generalization to unseen noises,
 we performed 6 experiments with different sets of noises seen during training.
 The networks were trained
@@ -350,6 +351,7 @@ as the number of seen noise types varies. We conclude that the best performance
 gain is achieved when a small number of noise types are available during training. 
 It can be seen that invariance training is able to generalize better to unseen 
 noise types compared with multi-condition training.
+% dima: we need to add that this is good news and very reasonable
 
 We note that our experiments did not use layer-wise pre-training, commonly used for small
 datasets. The baseline WERs reported are very close to the state-of-the-art. 
