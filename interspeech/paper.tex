@@ -79,7 +79,11 @@ reverse gradient
     transformations, with greater flexibility in constructing training 
     objective functions that promote learning of noise invariant 
     representations.
-    % Phil: The part below should include speaker invariance and mention the WSJ task
+    At the same time, the more complex relation between the parameters of deep
+    neural networks and the functions or distributions they represent, makes it
+    impossible to simply use the same types of adaptation and robustness methods
+    that have been developed for GMM-based systems.
+
     The main idea of this work is to force the acoustic model 
     to learn a representation which is invariant to noise conditions, instead of 
     explicitly using noise robust acoustic features 
@@ -87,10 +91,10 @@ reverse gradient
     training requires noise-condition labels during training only. It is 
     related to the idea of generative adversarial networks (GAN) and the 
     gradient reverse method proposed by~\cite{goodfellow2014generative} 
-    and~\cite{ganin2014unsupervised} respectively 
-    (Section~\ref{sec:background}). Then we discuss previous work in 
-    Section~\ref{sec:relatedwork}. 
-    We present results on the Aurora-4 speech 
+    and~\cite{ganin2014unsupervised} respectively. 
+    First, we discuss these two methods in Section~\ref{sec:background}.
+    Then, we discuss previous work in Section~\ref{sec:relatedwork}. 
+    Finally, we present results on the Aurora-4 speech 
     recognition task in Section~\ref{sec:experiments} and summarize 
     our findings in Section~\ref{sec:discussion}.
 
@@ -123,10 +127,15 @@ reverse gradient
     \end{subfigure}
     \caption{The model and summarized results.}
 \end{figure*}
-\emph{Generative Adversarial Networks} consist of two networks: the generator and the discriminator. 
+\emph{Generative Adversarial Networks} are data generating neural networks that
+    have been especially successful at producing small images.
+    Unlike most generative models, they are not trained by optimizing the
+    likelihood of the data, but by the optimization of a so-called
+    \emph{adversarial} objective. The training of Generative Adversarial
+    Networks, involves two neural networks: the generator and the discriminator. 
     The generator network $G$ has an
-    input of randomly-generated feature vectors and is asked to produce a
-    sample, e.g.\ an image, similar to the images in the training set. The discriminator network $D$
+    input of randomly-generated feature vectors $\bm{z}$ and is asked to produce a
+    sample $\bm{x}$, e.g.\ an image, similar to the images in the training set. The discriminator network $D$
     can either receive a generated image from the generator $G$ or an image
     from the training set. Its task is to distinguish
     between the ``counterfeit'' generated image and the ``genuine'' image taken from the dataset. Thus,
@@ -140,7 +149,7 @@ reverse gradient
     to do its best to recognize if there was a deception, similar to adversarial game-theoretic settings.    
     Formally, the objective function of GAN training is
     \begin{align}
-        \min_G \max_D V(D, G) = &\mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
+        V(D, G) = &\mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
             &\mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
         \label{eq:gan}
     \end{align}
