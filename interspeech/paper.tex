@@ -199,11 +199,42 @@ reverse gradient
 \section{Related Work}
 \label{sec:relatedwork}
     %TODO
+    To be robust with respect to different recording conditions and speakers,
+    one can either aim to adapt the model parameters to these new situations or
+    to learn representations which are invariant to them.
+    Unfortunately, many of the adaptation methods which have been designed for
+    GMM-HMM systems cannot be applied to DNN-based systems. For this reason, a
+    large body of recent work has investigated new adaptation methods for neural
+    networks.
 
     The effectiveness of representations produced by a neural network for internal 
     noise reduction is discussed by~\cite{yu2013feature} and this work sets a 
-    baseline for experiments on the Aurora-4 dataset. Recently, 
-    in a work by~\cite{yusuke2016adversarial} a multi-layer sigmoidal network was trained 
+    baseline for experiments on the Aurora-4 dataset.
+
+    Some of the linear and affine transformations used for GMM adaptation can
+    still be applied to neural networks when one limits these adaptations to the
+    very last layer, as was shown in~ \cite{yao2012adaptation}. The
+    improvements seemed to rely mostly on the adaptation of the bias parameters.
+
+    Many neural network speaker/condition adaptation methods are based on
+    i-vectors. One way to do this is by providing the i-vectors as additional
+    inputs \cite{senior2014improving}.
+
+    In the specific case of noise robustness, one can use speech enhancement to
+    obtain more robust features and neural networks have been used for this for
+    decades \cite{knecht1995neural}. A further step in this direction is to train
+    systems to recognize speech and perform speech enhancement jointly \cite{narayanan2014joint}. 
+
+    Another strategy is to retrain the model parameters using a very small
+    number of utterances from the new domain while making sure that the model
+    doesn't stray too far away from the parameter values that were obtained from
+    the train data \cite{yu2013kl}.
+    The adaptation to new domains can also be kept under control by limiting
+    the number of parameters which are adapted to the new data or by limiting the
+    adaptation to a rescaling of the hidden unit activations
+    \cite{swietojanski2014learning}.
+
+    Recently, in a work by~\cite{yusuke2016adversarial} a multi-layer sigmoidal network was trained 
     in an adversarial fashion on an in-house transcription task corrupted by noise.
 
     %TODO
