@@ -133,7 +133,7 @@ reverse gradient
     from the training set. Its task is to distinguish
     between the ``counterfeit'' generated image and the ``genuine'' image taken from the dataset. Thus,
     the discriminator is just a classifier network with a sigmoid output layer
-    and can be trained with gradient backpropagation. This gradient can be propagated further
+    and can be trained with gradient back-propagation. This gradient can be propagated further
     to the generator network (assuming that the output of the generator is
     continuous).
 
@@ -149,7 +149,7 @@ reverse gradient
     The maximization over the discriminator $D$ forms a usual cross-entropy objective, the gradients are
     computed with respect to the parameters of $D$. An important property of
     this objective is that the gradient of the composition~$D(G(\cdot))$ is well
-    defined. Therefore the generator~$G$ can be trained with the backpropagation
+    defined. Therefore the generator~$G$ can be trained with the back-propagation
     algorithm using the gradient signal from the discriminator~$D$.
     The generator~$G$ is
     minimizing the classification objective using the gradients
@@ -163,7 +163,7 @@ reverse gradient
         - \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (D(G(\bm{z})))].
     \end{equation}
     The gradient of this term has the same sign but it has better properties.
-    We experimented with severall losses for our discriminator and chose one
+    We experimented with several losses for our discriminator and chose one
     similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
     to demonstrate the general direction of the gradient of the discriminator loss.
     
@@ -203,7 +203,7 @@ reverse gradient
     The effectiveness of representations produced by a neural network for internal 
     noise reduction is discussed by~\cite{yu2013feature} and this work sets a 
     baseline for experiments on the Aurora-4 dataset. Recently, 
-    in a work by~\cite{yusuke2016adversarial} a multilayer sigmoidal network was trained 
+    in a work by~\cite{yusuke2016adversarial} a multi-layer sigmoidal network was trained 
     in an adversarial fashion on an in-house transcription task corrupted by noise.
 
     %TODO
