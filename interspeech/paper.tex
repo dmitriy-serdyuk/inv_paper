@@ -31,7 +31,7 @@
   $^1$MILA, Universit\'e de Montr\'eal, Canada\\
   $^2$IBM Watson, USA\\
   $^\dagger$CIFAR Fellow}
-\email{serdyuk@iro.umontreal.ca}
+  \email{\{serdyuk,brakelp\}@iro.umontreal.ca, \{kaudhkha,bhuvana,sthomas\}@us.ibm.com}
 
 \begin{document}
 
@@ -139,13 +139,14 @@ reverse gradient
     \begin{equation}
         - \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (D(G(\bm{z})))].
     \end{equation}
-    The gradient of this term has the same sign but it has better properties.
+    The gradient of this term has the same sign but it has better properties in
+    some cases.
     We experimented with several losses for our discriminator and chose one
     similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
     to demonstrate the general direction of the gradient of the discriminator loss.
 
     Optimization of the GAN objective corresponds to a minimization of the
-    so-called Jenson-Shannon divergence between the data distribution and the
+    so-called Jensen-Shannon divergence between the data distribution and the
     distribution represented by the generator. This divergence is zero if and
     only if the two distributions are identical. From this perspective, we can
     say that the discriminator provides a training signal which allows
@@ -164,37 +165,6 @@ reverse gradient
     interfere with the target classifier at test time. Similar to the GAN 
     objective, which forces the generation distribution be close to the data distribution,
     the \emph{gradient reverse method} makes domain specific distributions similar to each other.
-\begin{figure}[t]
-    \centering
-
-    \centering
-        \includegraphics[width=0.4\linewidth]{model.pdf}
-        \caption{The model consists of three neural networks. The encoder $E$ produces
-        the intermediate representation $h$ which used in the recognizer $R$ and 
-        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
-        the recognition and minimize the domain discriminator accuracy. The domain discriminator
-        is a classifier trained to maximize its accuracy on the noise type
-        classification task.}
-        \label{fig:model}
-\end{figure}
-\begin{figure}[t]
-    \begin{subfigure}[b]{\linewidth}
-        \centering
-        \includegraphics[width=1.1\linewidth]{wer_avg.pdf}
-        \caption{Average performance of the baseline multi-condition and invariance model varying with  the number of noise
-            conditions used for training.}
-        \label{fig:results}
-    \end{subfigure}
-    \begin{subfigure}[b]{\linewidth}
-        \centering
-        \includegraphics[width=1.1\linewidth]{wer_seen_unseen.pdf}
-        \caption{Average performance on seen versus unseen noise conditions.
-            Testing was performed on all wv1 conditions (Sennheiser microphone).
-            }
-    \end{subfigure}
-    \caption{Summarized results.}
-    \label{fig:results}
-\end{figure}
 
     The network is trained with three goals: the hidden representation $h$ should
     be helpful for the target classifier, harmful for the domain classifier,
@@ -309,31 +279,37 @@ The terms $L_1$ and $L_2$ are
 regular cross-entropies which are minimized with corresponding parameters $\theta_E$ and $\theta_D$.
 For simplicity, we use only a single hyper-parameter -- the weight of the third term.
 
-\begin{table*}[t]
+\begin{figure}[t]
     \centering
-    \caption{Average word error rates (WER\%) on Aurora-4 dataset on all test conditions,
-        including seen and unseen noise and unseen microphone. The first column
-        specifies the number of noise conditions used for the training. The
-        results in the last row are from a preliminary experiment with
-        layer-wise pre-training, close to state-of-the-art
-        model and a corresponding invariance training starting with a pretrained model.}
-    \label{tab:results}
-    \begin{tabular}{r|cc||cc|cc|cc|cc}
-    %\multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
-    %           & wv1  & wv2  & wv1  & wv2 \\
-        Noise       &Inv&BL&  \multicolumn{2}{c|}{A} & \multicolumn{2}{c|}{B} & \multicolumn{2}{c|}{C} & \multicolumn{2}{c}{D}\\
-               & & &  Inv & BL & Inv & BL & Inv & BL & Inv & BL\\
-    \hline
-    1           &16.36        &18.14 &6.54&7.57    &12.71& 14.09   & 11.45&   13.10    & 22.47 &   24.80    \\
-    2           &15.56        &17.39 &5.90&  6.58 &   11.69   &13.28   &11.12   &13.51   &21.79   &23.96 \\
-    3           &14.24        &14.67 &5.45 & 5.08&    10.76&   12.44&   9.75&    9.84 &   19.93&   19.30\\
-    4           &13.61        &13.84 & 5.08 &5.29    &9.73    &9.97    &9.49    &9.56    &19.49   &19.90\\         
-    5           &13.41        &13.02 & 5.12 &5.34    &9.52    &9.42    &9.55    &8.67    &19.33   &18.65\\         
-    6           &12.62        &12.60 & 4.80 &4.61    &9.04    &8.86    &8.76    &8.59    &18.16   &18.21\\
-    \hline\hline
-    6* &11.85        &11.99    &4.52    &4.76    &8.76    &8.76    &7.79    &8.57    &16.84&    16.99
-    \end{tabular}
-\end{table*}
+
+    \centering
+        \includegraphics[width=0.4\linewidth]{model.pdf}
+        \caption{The model consists of three neural networks. The encoder $E$ produces
+        the intermediate representation $h$ which used in the recognizer $R$ and 
+        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
+        the recognition and minimize the domain discriminator accuracy. The domain discriminator
+        is a classifier trained to maximize its accuracy on the noise type
+        classification task.}
+        \label{fig:model}
+\end{figure}
+\begin{figure}[t]
+    \begin{subfigure}[b]{\linewidth}
+        \centering
+        \includegraphics[width=1.1\linewidth]{wer_avg.pdf}
+        \caption{Average performance of the baseline multi-condition and invariance model varying with  the number of noise
+            conditions used for training.}
+        \label{fig:results}
+    \end{subfigure}
+    \begin{subfigure}[b]{\linewidth}
+        \centering
+        \includegraphics[width=1.1\linewidth]{wer_seen_unseen.pdf}
+        \caption{Average performance on seen versus unseen noise conditions.
+            Testing was performed on all wv1 conditions (Sennheiser microphone).
+            }
+    \end{subfigure}
+    \caption{Summarized results.}
+    \label{fig:results}
+\end{figure}
 
 \section{Experiments}
 \label{sec:experiments}
@@ -384,16 +360,41 @@ datasets. The baseline WERs reported are very close to the state-of-the-art.
 Our preliminary experiments on a pre-trained network (better overall WER) when 
 using all noise types (last row of Table~\ref{tab:results}) for training show 
 the same trend as the non-pretrained networks.
+\begin{table*}[t]
+    \centering
+    \caption{Average word error rates (WER\%) on Aurora-4 dataset on all test conditions,
+        including seen and unseen noise and unseen microphone. The first column
+        specifies the number of noise conditions used for the training. The
+        results in the last row are from a preliminary experiment with
+        layer-wise pre-training, close to state-of-the-art
+        model and a corresponding invariance training starting with a pretrained model.}
+    \label{tab:results}
+    \begin{tabular}{r|cc||cc|cc|cc|cc}
+    %\multirow{2}{*}{Subset} & \multicolumn{2}{c}{Orig}  & \multicolumn{2}{|c}{Inv}\\ 
+    %           & wv1  & wv2  & wv1  & wv2 \\
+        Noise       &Inv&BL&  \multicolumn{2}{c|}{A} & \multicolumn{2}{c|}{B} & \multicolumn{2}{c|}{C} & \multicolumn{2}{c}{D}\\
+               & & &  Inv & BL & Inv & BL & Inv & BL & Inv & BL\\
+    \hline
+    1           &16.36        &18.14 &6.54&7.57    &12.71& 14.09   & 11.45&   13.10    & 22.47 &   24.80    \\
+    2           &15.56        &17.39 &5.90&  6.58 &   11.69   &13.28   &11.12   &13.51   &21.79   &23.96 \\
+    3           &14.24        &14.67 &5.45 & 5.08&    10.76&   12.44&   9.75&    9.84 &   19.93&   19.30\\
+    4           &13.61        &13.84 & 5.08 &5.29    &9.73    &9.97    &9.49    &9.56    &19.49   &19.90\\         
+    5           &13.41        &13.02 & 5.12 &5.34    &9.52    &9.42    &9.55    &8.67    &19.33   &18.65\\         
+    6           &12.62        &12.60 & 4.80 &4.61    &9.04    &8.86    &8.76    &8.59    &18.16   &18.21\\
+    \hline\hline
+    6* &11.85        &11.99    &4.52    &4.76    &8.76    &8.76    &7.79    &8.57    &16.84&    16.99
+    \end{tabular}
+\end{table*}
 
-\section{Discussion}
+\section{Conclusion}
 \label{sec:discussion}
     This paper presents the application of generative adversarial networks and 
     invariance training for noise robust speech recognition. We show that invariance training 
     helps the ASR system to generalize better to unseen noise conditions and improves 
     the word error rate when a small number of noise types are seen during training. Our 
     experiments show that in contrast to the image recognition task, in speech 
-    recognition, the domain adaptation network suffers from underfitting. Therefore, the 
-    gradient of the $L_3$ term in Eq.~\ref{eq:grm} is unreliable and noisy. Future 
+    recognition, the task of the domain classification ($D$) network is harder. Therefore, the 
+    gradient of the $L_3$ term in Eq.~\ref{eq:grm} is noisier. Future 
     research includes enhancements to the domain adaptation network while exploring 
     alternative network architectures and invariance-promoting loss functions.
 
