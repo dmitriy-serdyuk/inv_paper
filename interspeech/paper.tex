@@ -96,33 +96,6 @@ reverse gradient
 
 \section{Background}
 \label{sec:background}
-\begin{figure*}
-    \centering
-
-    \captionsetup[subfigure]{oneside,margin={0.3cm,0cm}}
-    \begin{subfigure}[b]{0.49\linewidth}
-    \centering
-        \includegraphics[width=0.4\linewidth]{model.pdf}
-        \caption{The model consists of three neural networks. The encoder $E$ produces
-        the intermediate representation $h$ which used in the recognizer $R$ and 
-        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
-        the recognition and minimize the domain discriminator accuracy. The domain discriminator
-        is a classifier trained to maximize its accuracy on the noise type
-        classification task.}
-        \label{fig:model}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.5\linewidth}
-        \centering
-        \includegraphics[width=0.7\linewidth]{wer_avg.pdf}
-        \includegraphics[width=0.7\linewidth]{wer_seen_unseen.pdf}
-        \caption{Top: Average performance of the baseline multi-condition and invariance model varying with  the number of noise
-            conditions used for training. Bottom: Average performance on seen versus unseen noise conditions.
-            Testing was performed on all wv1 conditions (Sennheiser microphone).
-            }
-        \label{fig:results}
-    \end{subfigure}
-    \caption{The model and summarized results.}
-\end{figure*}
 \emph{Generative Adversarial Networks} consist of two networks: the generator and the discriminator. 
     The generator network $G$ has an
     input of randomly-generated feature vectors and is asked to produce a
@@ -140,9 +113,11 @@ reverse gradient
     to do its best to recognize if there was a deception, similar to adversarial game-theoretic settings.    
     Formally, the objective function of GAN training is
     \begin{align}
+    \begin{split}
         \min_G \max_D V(D, G) = &\mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
             &\mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
-        \label{eq:gan}
+    \end{split}
+    \label{eq:gan}
     \end{align}
     The maximization over the discriminator $D$ forms a usual cross-entropy objective, the gradients are
     computed with respect to the parameters of $D$. An important property of
@@ -191,10 +166,41 @@ reverse gradient
     interfere with the target classifier at test time. Similar to the GAN 
     objective, which forces the generation distribution be close to the data distribution,
     the \emph{gradient reverse method} makes domain specific distributions similar to each other.
+\begin{figure}[t]
+    \centering
+
+    \centering
+        \includegraphics[width=0.4\linewidth]{model.pdf}
+        \caption{The model consists of three neural networks. The encoder $E$ produces
+        the intermediate representation $h$ which used in the recognizer $R$ and 
+        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
+        the recognition and minimize the domain discriminator accuracy. The domain discriminator
+        is a classifier trained to maximize its accuracy on the noise type
+        classification task.}
+        \label{fig:model}
+\end{figure}
+\begin{figure}[t]
+    \begin{subfigure}[b]{\linewidth}
+        \centering
+        \includegraphics[width=1.1\linewidth]{wer_avg.pdf}
+        \caption{Average performance of the baseline multi-condition and invariance model varying with  the number of noise
+            conditions used for training.}
+        \label{fig:results}
+    \end{subfigure}
+    \begin{subfigure}[b]{\linewidth}
+        \centering
+        \includegraphics[width=1.1\linewidth]{wer_seen_unseen.pdf}
+        \caption{Average performance on seen versus unseen noise conditions.
+            Testing was performed on all wv1 conditions (Sennheiser microphone).
+            }
+    \end{subfigure}
+    \caption{Summarized results.}
+    \label{fig:results}
+\end{figure}
 
     The network is trained with three goals: the hidden representation $h$ should
     be helpful for the target classifier, harmful for the domain classifier,
-    and the domain classifier should have a good classification accuracy. More 
+   and the domain classifier should have a good classification accuracy. More 
     formally, the authors define the loss function as
     \begin{equation}
         L = L_1(\hat{y}, y; \theta_R, \theta_E) + 
@@ -286,9 +292,19 @@ gradient reverse method. It is a feed-forward neural network trained to predict
 the CD-HMM state, with a branch that predicts the domain (noise condition). This 
 branch is discarded in the testing phase. In our experiments we
 used the noise condition as the domain label, merging all noise types into one label
-and defining `clean' as the other label. Our training loss function is Eq.~\ref{eq:grm} with 
-$L_3$ set to $d\log(1 - \hat{d}) + (1-d)\log(\hat{d})$ for stability during training. 
-$L_3$ term maximizes the probability
+and defining `clean' as the other label. Our training loss function is  
+\begin{align}
+    \begin{split}
+    L = L_1(\hat{y}, y; \theta_R, \theta_E) + 
+    \alpha L_2(\hat{d}, d; \theta_D) -\\
+    \beta [d\log(1 - \hat{d}) + (1-d)\log(\hat{d})],
+    \end{split}
+    \label{eq:our}
+\end{align}
+where $d$ is the domain label and $\hat{d}$ is the predicted domain.
+The~$L_3$ term from Eq.~\ref{eq:grm} is defined according to the standard GAN
+objective for stability during training. 
+This term maximizes the probability
 of an incorrect domain classification in contrast to the gradient reverse where the 
 correct classification is minimized.
 The terms $L_1$ and $L_2$ are 
