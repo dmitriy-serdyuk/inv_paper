@@ -31,7 +31,7 @@
   $^1$MILA, Universit\'e de Montr\'eal, Canada\\
   $^2$IBM Watson, USA\\
   $^\dagger$CIFAR Fellow}
-\email{author@university.edu, coauthor@company.com}
+\email{serdyuk@iro.umontreal.ca}
 
 \begin{document}
 
@@ -46,8 +46,7 @@ labels. This is tightly connected to the ideas behind generative adversarial
 networks (GANs). Therefore, some insights for training GANs are needed for the
 reverse gradient's successful application. We adapt this approach to train an 
 acoustic system that is invariant to undesirable factors such as the recording
-environment noise type. We also investigate speaker identity invariance and 
-conduct experiments on two popular datasets.
+environment noise type. We conduct experiments on a popular dataset.
 \end{abstract}
 \noindent\textbf{Index Terms}: speech recognition, adversarial training, 
 reverse gradient
@@ -71,11 +70,11 @@ reverse gradient
     % experiments are actually with hybrid systems and this version of the paper will not
     % have to be sold as being end-to-end anymore.
     With the increasing success of Deep Neural 
-    Network~(DNN) acoustic models for ASR 
-    \citep{hinton2012deep,seide2011conversational,sainath2011making}, 
-    end-to-end systems are being 
-    proposed~\citep{miao2015eesen,sainath2015learning} for modeling the 
-    acoustic conditions within a single network. This allows us to take 
+    Network~(DNN) acoustic models for ASR investigated 
+    in~\citep{hinton2012deep,seide2011conversational,sainath2011making}, 
+    and in more recent works~\citep{miao2015eesen,sainath2015learning} 
+    complicated structure of acoustic conditions is modeled within a single network.
+    This allows us to take 
     advantage of the network's ability to learn highly non-linear feature 
     transformations, with greater flexibility in constructing training 
     objective functions that promote learning of noise invariant 
@@ -89,21 +88,23 @@ reverse gradient
     related to the idea of generative adversarial networks (GAN) and the 
     gradient reverse method proposed in~\cite{goodfellow2014generative} 
     and~\cite{ganin2014unsupervised} respectively 
-    (Section~\ref{sec:relatedwork}). We present results on the Aurora-4 speech 
+    (Section~\ref{sec:background}). Then we discuss previous work in 
+    Section~\ref{sec:relatedwork}. 
+    We present results on the Aurora-4 speech 
     recognition task in Section~\ref{sec:experiments} and summarize 
     our findings in Section~\ref{sec:discussion}.
 
 % This is more of an explanation of the method rather than a literature review.
     % Perhaps we should change the section title.
-\section{Related Work}
-\label{sec:relatedwork}
+\section{Background}
+\label{sec:background}
 \emph{Generative Adversarial Networks} consist of two networks: the generator and the discriminator. 
     The generator network $G$ has an
     input of randomly-generated feature vectors and is asked to produce a
     sample, e.g.\ an image, similar to the images in the training set. The discriminator network $D$
     can either receive a generated image from the generator $G$ or an image
     from the training set. Its task is to distinguish
-    between the ``fake'' generated image and the ``real'' image taken from the dataset. Thus,
+    between the ``counterfeit'' generated image and the ``genuine'' image taken from the dataset. Thus,
     the discriminator is just a classifier network with a sigmoid output layer
     and can be trained with gradient backpropagation. This gradient can be propagated further
     to the generator network (assuming that the output of the generator is
@@ -113,17 +114,31 @@ reverse gradient
     generator is trying to deceive the discriminator network, while the discriminator tries
     to do its best to recognize if there was a deception, similar to adversarial game-theoretic settings.    
     Formally, the objective function of GAN training is
-    \begin{align*}
+    \begin{align}
         \min_G \max_D V(D, G) = &\mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
             &\mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (1 - D(G(\bm{z})))].
-    \end{align*}
+        \label{eq:gan}
+    \end{align}
     The maximization over the discriminator $D$ forms a usual cross-entropy objective, the gradients are
-    computed with respect to the parameters of $D$. The parameters of $G$ are
+    computed with respect to the parameters of $D$. An important property of
+    this objective is that the gradient of the composition~$D(G(\cdot))$ is well
+    defined. Therefore the generator~$G$ can be trained with the backpropagation
+    algorithm using the gradient signal from the discriminator~$D$.
+    The generator~$G$ is
     minimizing the classification objective using the gradients
     propagated through the second term. The minimization over $G$ makes it
     produce samples which $D$ classifies as originating from the train data.
+
     Several practical guidelines were proposed for optimizing GANs in~\cite{radford2015unsupervised} and 
-    further explored in~\cite{salimans2016improved}.
+    further explored in~\cite{salimans2016improved}. The second term of Eq.~\ref{eq:gan}
+    is frequently exchanged with
+    \begin{equation}
+        - \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (D(G(\bm{z})))].
+    \end{equation}
+    The gradient of this term has the same sign but it has better properties.
+    We experimented with severall losses for our discriminator and chose one
+    similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
+    to demonstrate the general direction of the gradient of the discriminator loss.
     
     Prior work by~\cite{ganin2014unsupervised} proposed a method for training a network 
     which can be adapted to new domains. The training data consists of the images
@@ -169,7 +184,12 @@ reverse gradient
     is a classifier trained to maximize its accuracy on the noise type
     classification task.}
     \label{fig:model}
-\end{figure}[t]
+\end{figure}
+
+\section{Related Work}
+\label{sec:relatedwork}
+
+%TODO
 
 \section{Invariant Representations for Speech Recognition}
 \label{sec:invariant-speech}
