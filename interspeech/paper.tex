@@ -171,6 +171,14 @@ reverse gradient
     %the distribution of the data with the distribution of the generator using
     %a discriminator to provide the training signal. This approach can be generalized
     %on any distributions to be matched.
+    Optimization of the GAN objective corresponds to a minimization of the
+    so-called Jenson-Shannon divergence between the data distribution and the
+    distribution represented by the generator. This divergence is zero if and
+    only if the two distributions are identical. From this perspective, we can
+    say that the discriminator provides a training signal which allows
+    one to match distributions in general. In this work we are interested in
+    matching feature distributions of different noise conditions.
+
     Prior work by~\cite{ganin2014unsupervised} proposed a method for training a network 
     which can be adapted to new domains. The training data consists of the images
     labeled with classes of interest and separate domain (image background) labels. 
@@ -237,6 +245,9 @@ reverse gradient
     We argue that speech enhancement is a more difficult task to learn than
     invariance to certain noise conditions and more likely to suffer from
     overfitting when the amount of available noisy data is limited.
+    Another downside of enhancement approaches is that there is no reason to
+    expect them to generalize well to noise conditions that were not available during
+    training.
 
     Another adaptation strategy is to retrain the model parameters using a very small
     number of utterances from the new domain while making sure that the model
@@ -318,7 +329,7 @@ is based on the Wall Street Journal corpus (WSJ0). It contains noises of
 six categories which were added to the clean data. Every clean and noisy
 utterance has been 
 % what kind of frequency characteristics?
-filtered to simulate the frequency characteristics. The training
+filtered to simulate the phone quality recording using P.341 \citep{parihar2002aurora}. The training
 data contains 4400 clean utterances and 446 utterances for each noise condition,
 i.e., a total of 2676 noisy utterances.
 The test set consists of clean data, data corrupted by 6 noise types, and data 
@@ -334,7 +345,8 @@ annealing~\citep[the learning rate is halfed if no improvement on the validation
 
 % TODO
 % dima: we need to emphasize that the unseen noises are very important
-To evaluate the impact of our method on generalization to unseen noises,
+To evaluate the impact of our method on generalization to \emph{unseen} noises (the
+most typical situation in practice),
 we performed 6 experiments with different sets of noises seen during training.
 The networks were trained
 on clean data, with each noise condition added one-by-one in the following order: airport, babble, car, 
@@ -351,6 +363,9 @@ as the number of seen noise types varies. We conclude that the best performance
 gain is achieved when a small number of noise types are available during training. 
 It can be seen that invariance training is able to generalize better to unseen 
 noise types compared with multi-condition training.
+In practice, it's only possible to train on a small fraction of all the possible
+noise conditions in the world, so this apparent ability to generalize to unseen
+conditions is a promising result.
 % dima: we need to add that this is good news and very reasonable
 
 We note that our experiments did not use layer-wise pre-training, commonly used for small
