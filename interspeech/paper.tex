@@ -100,7 +100,13 @@ reverse gradient
 
 \section{Background}
 \label{sec:background}
-\emph{Generative Adversarial Networks} consist of two networks: the generator and the discriminator. 
+\emph{Generative Adversarial Networks} are data generating neural networks that
+    have been especially successful at producing small images.
+    Unlike most generative models, they are not trained by optimizing the
+    likelihood of the data, but by the optimization of a so-called
+    \emph{adversarial} objective. The training of Generative Adversarial
+    Networks, involves two neural networks: the generator and the discriminator. 
+
     The generator network $G$ has an
     input of randomly-generated feature vectors $\bm{z}$ and is asked to produce a
     sample $\bm{x}$, e.g.\ an image, similar to the images in the training set. The discriminator network $D$
