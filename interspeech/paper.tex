@@ -86,7 +86,7 @@ reverse gradient
     (Section~\ref{sec:invariant-speech}). This type of noise-invariant 
     training requires noise-condition labels during training only. It is 
     related to the idea of generative adversarial networks (GAN) and the 
-    gradient reverse method proposed in~\cite{goodfellow2014generative} 
+    gradient reverse method proposed by~\cite{goodfellow2014generative} 
     and~\cite{ganin2014unsupervised} respectively 
     (Section~\ref{sec:background}). Then we discuss previous work in 
     Section~\ref{sec:relatedwork}. 
@@ -156,8 +156,8 @@ reverse gradient
     propagated through the second term. The minimization over $G$ makes it
     produce samples which $D$ classifies as originating from the train data.
 
-    Several practical guidelines were proposed for optimizing GANs in~\cite{radford2015unsupervised} and 
-    further explored in~\cite{salimans2016improved}. The second term of Eq.~\ref{eq:gan}
+    Several practical guidelines were proposed for optimizing GANs by~\cite{radford2015unsupervised} and 
+    further explored by~\cite{salimans2016improved}. The second term of Eq.~\ref{eq:gan}
     is frequently exchanged with
     \begin{equation}
         - \mathbb{E}_{\bm{z} \sim p_{\bm{z}}(\bm{z})}[\log (D(G(\bm{z})))].
@@ -196,16 +196,19 @@ reverse gradient
     recognizer and the domain classifier networks respectively. The hyper-parameters
     $\alpha$ and $\beta$ denote the relative influence of the loss functions terms.
 
-    The effectiveness of representations produced by a neural network for internal 
-    noise reduction is discussed in~\cite{yu2013feature} and this work sets a 
-    baseline for experiments on the Aurora-4 dataset. Recently, 
-    in~\cite{yusuke2016adversarial} a multilayer sigmoidal network was trained 
-    in an adversarial fashion on an in-house transcription task corrupted by noise.
-
 \section{Related Work}
 \label{sec:relatedwork}
+    %TODO
 
-%TODO
+    The effectiveness of representations produced by a neural network for internal 
+    noise reduction is discussed by~\cite{yu2013feature} and this work sets a 
+    baseline for experiments on the Aurora-4 dataset. Recently, 
+    in a work by~\cite{yusuke2016adversarial} a multilayer sigmoidal network was trained 
+    in an adversarial fashion on an in-house transcription task corrupted by noise.
+
+    %TODO
+    \cite{saon2017english} use a form of adversarial training with a network
+    that predicts an i-vector using the mean square error loss.
 
 \section{Invariant Representations for Speech Recognition}
 \label{sec:invariant-speech}
@@ -231,8 +234,6 @@ correct classification is minimized.
 The terms $L_1$ and $L_2$ are 
 regular cross-entropies which are minimized with corresponding parameters $\theta_E$ and $\theta_D$.
 For simplicity, we use only a single hyper-parameter -- the weight of the third term.
-
-% This should be done with subfig instead of saying Top/Bottom in the caption
 
 \begin{table*}[t]
     \centering
@@ -280,7 +281,7 @@ features that were subsequently mean and variance normalized. The baseline
 acoustic model was a 6-layer 
 DNN with 2048 rectified linear units at every layer. It was trained using 
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
-annealing~\citep[as in][]{morgan1995continuous,sainath2011making}.
+annealing~\citep[half the learning rate if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
 To evaluate the impact of our method on generalization to unseen noises,
 we performed 6 experiments with different sets of noises seen during training.
@@ -321,7 +322,7 @@ the same trend as the non-pretrained networks.
 \section{Acknowledgments}
 
 We would like to thank Yaroslav Ganin, David Warde-Farley for insightful discussions,
-developers of Theano~\cite{theano2016theano}, Blocks, and Fuel~\cite{MerrienboerBDSW15} 
+developers of Theano~\citep{theano2016theano}, Blocks, and Fuel~\citep{MerrienboerBDSW15} 
 for great toolkits.
 
 \bibliographystyle{IEEEtranN}
