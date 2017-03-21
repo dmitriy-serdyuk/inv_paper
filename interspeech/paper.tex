@@ -115,7 +115,7 @@ reverse gradient
     The two networks in the GAN setup are competing with each other: the 
     generator is trying to deceive the discriminator network, while the discriminator tries
     to do its best to recognize if there was a deception, similar to adversarial game-theoretic settings.    
-    Formally, the objective function of GAN training is
+    Formally, the objective function of GAN training is $\min_G \max_D V(D, G)$ with
     \begin{align}
     \begin{split}
         V(D, G) = &\mathbb{E}_{\bm{x} \sim p_{\text{data}}(\bm{x})}[\log D(\bm{x})] + \\
@@ -354,7 +354,7 @@ features that were subsequently mean and variance normalized. The baseline
 acoustic model was a 6-layer 
 DNN with 2048 rectified linear units at every layer. It was trained using 
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
-annealing~\citep[the learning rate is halfed if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
+annealing~\citep[the learning rate is halved if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
 To evaluate the impact of our method on generalization to \emph{unseen} noises (the
 most typical situation in practice),
