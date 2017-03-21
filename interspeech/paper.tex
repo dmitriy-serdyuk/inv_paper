@@ -98,6 +98,33 @@ reverse gradient
     % Perhaps we should change the section title.
 \section{Background}
 \label{sec:background}
+\begin{figure*}
+    \centering
+
+    \captionsetup[subfigure]{oneside,margin={0.3cm,0cm}}
+    \begin{subfigure}[b]{0.49\linewidth}
+    \centering
+        \includegraphics[width=0.4\linewidth]{model.pdf}
+        \caption{The model consists of three neural networks. The encoder $E$ produces
+        the intermediate representation $h$ which used in the recognizer $R$ and 
+        in the domain discriminator $D$. The hidden representation $h$ is trained to improve
+        the recognition and minimize the domain discriminator accuracy. The domain discriminator
+        is a classifier trained to maximize its accuracy on the noise type
+        classification task.}
+        \label{fig:model}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.5\linewidth}
+        \centering
+        \includegraphics[width=0.7\linewidth]{wer_avg.pdf}
+        \includegraphics[width=0.7\linewidth]{wer_seen_unseen.pdf}
+        \caption{Top: Average performance of the baseline multi-condition and invariance model varying with  the number of noise
+            conditions used for training. Bottom: Average performance on seen versus unseen noise conditions.
+            Testing was performed on all wv1 conditions (Sennheiser microphone).
+            }
+        \label{fig:results}
+    \end{subfigure}
+    \caption{The model and summarized results.}
+\end{figure*}
 \emph{Generative Adversarial Networks} consist of two networks: the generator and the discriminator. 
     The generator network $G$ has an
     input of randomly-generated feature vectors and is asked to produce a
@@ -174,17 +201,6 @@ reverse gradient
     baseline for experiments on the Aurora-4 dataset. Recently, 
     in~\cite{yusuke2016adversarial} a multilayer sigmoidal network was trained 
     in an adversarial fashion on an in-house transcription task corrupted by noise.
-\begin{figure}[t]
-    \centering
-    \includegraphics[width=0.4\linewidth]{model.pdf}
-    \caption{The model consists of three neural networks. The encoder $E$ produces
-    the intermediate representation $h$ which used in the recognizer $R$ and 
-    in the domain discriminator $D$. The hidden representation $h$ is trained to improve
-    the recognition and minimize the domain discriminator accuracy. The domain discriminator
-    is a classifier trained to maximize its accuracy on the noise type
-    classification task.}
-    \label{fig:model}
-\end{figure}
 
 \section{Related Work}
 \label{sec:relatedwork}
@@ -217,16 +233,6 @@ regular cross-entropies which are minimized with corresponding parameters $\thet
 For simplicity, we use only a single hyper-parameter -- the weight of the third term.
 
 % This should be done with subfig instead of saying Top/Bottom in the caption
-\begin{figure}
-    \centering
-    \includegraphics[width=\linewidth]{wer_avg.pdf}
-    \includegraphics[width=\linewidth]{wer_seen_unseen.pdf}
-    \caption{Top: Average performance of the baseline multi-condition and invariance model varying with  the number of noise
-        conditions used for training. Bottom: Average performance on seen versus unseen noise conditions.
-        Testing was performed on all wv1 conditions (Sennheiser microphone).
-        }
-    \label{fig:results}
-\end{figure}
 
 \begin{table*}[t]
     \centering
