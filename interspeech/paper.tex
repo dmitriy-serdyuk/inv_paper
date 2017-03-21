@@ -62,7 +62,7 @@ reverse gradient
 
     Several model and feature based adaptation methods such as Maximum 
     Likelihood Linear Regression (MLLR),  feature-based MLLR and 
-    iVectors~\citep{saon2013speaker} have been proposed to handle speaker 
+    i-vectors~\citep{saon2013speaker} have been proposed to handle speaker 
     variability; and Noise Adaptive Training \citep[NAT;][]{kalinli2010noise}
     and Vector Taylor Series \citep[VTS;][]{un1998speech} to handle 
     environment variability.
@@ -94,8 +94,6 @@ reverse gradient
     recognition task in Section~\ref{sec:experiments} and summarize 
     our findings in Section~\ref{sec:discussion}.
 
-% This is more of an explanation of the method rather than a literature review.
-    % Perhaps we should change the section title.
 \section{Background}
 \label{sec:background}
 \begin{figure*}
@@ -166,7 +164,13 @@ reverse gradient
     We experimented with several losses for our discriminator and chose one
     similar to Eq.~\ref{eq:gan} but we maintain the negative sign in our notation
     to demonstrate the general direction of the gradient of the discriminator loss.
-    
+
+    %TODO
+    % dima: I want to add something like this:
+    %Another point of view on the GAN training is that the generator is matching
+    %the distribution of the data with the distribution of the generator using
+    %a discriminator to provide the training signal. This approach can be generalized
+    %on any distributions to be matched.
     Prior work by~\cite{ganin2014unsupervised} proposed a method for training a network 
     which can be adapted to new domains. The training data consists of the images
     labeled with classes of interest and separate domain (image background) labels. 
@@ -198,7 +202,6 @@ reverse gradient
 
 \section{Related Work}
 \label{sec:relatedwork}
-    %TODO
     Neural networks display some robustness towards different recording
     conditions and speaker by themselves and the effectiveness of representations
     produced by a neural network for internal 
@@ -224,13 +227,13 @@ reverse gradient
 
     Many neural network speaker adaptation methods are based on
     i-vectors. The most common way to exploit i-vectors is by providing them as additional
-    inputs \cite{senior2014improving,saon2013speaker}. This means that i-vectors also need to
+    inputs~\citep{senior2014improving,saon2013speaker}. This means that i-vectors also need to
     be available during testing and this may not always be practical.
 
     In the specific case of noise robustness, one can use speech enhancement to
     obtain more robust features and neural networks have been used for this for
-    decades \cite{knecht1995neural}. A further step in this direction is to train
-    systems to recognize speech and perform speech enhancement jointly \cite{narayanan2014joint}. 
+    decades~\citep{knecht1995neural}. A further step in this direction is to train
+    systems to recognize speech and perform speech enhancement jointly~\citep{narayanan2014joint}. 
     We argue that speech enhancement is a more difficult task to learn than
     invariance to certain noise conditions and more likely to suffer from
     overfitting when the amount of available noisy data is limited.
@@ -238,11 +241,10 @@ reverse gradient
     Another adaptation strategy is to retrain the model parameters using a very small
     number of utterances from the new domain while making sure that the model
     doesn't stray too far away from the parameter values that were obtained from
-    the train data \cite{yu2013kl}.
+    the train data~\citep{yu2013kl}.
     The adaptation to new domains can also be kept under control by limiting
     the number of parameters which are adapted to the new data or by limiting the
-    adaptation to a rescaling of the hidden unit activations
-    \cite{swietojanski2014learning}.
+    adaptation to a rescaling of the hidden unit activations~\citep{swietojanski2014learning}.
     The most important difference between these approaches and our work is that
     we don't adapt the model parameters at all after training. In many
     situations this may not be possible and retraining of models may require more
@@ -254,7 +256,7 @@ reverse gradient
     more challenging benchmark while investigating different numbers of noise
     conditions. Our work also differs due to the use of more modern rectifier
     activation based classification networks.
-    Finally, in other very recent work, \cite{saon2017english} a form of adversarial training with a network
+    Finally, in other very recent work~\citep{saon2017english} a form of adversarial training with a network
     that predicts an i-vector using the mean square error loss was used.
 
 \section{Invariant Representations for Speech Recognition}
@@ -328,8 +330,10 @@ features that were subsequently mean and variance normalized. The baseline
 acoustic model was a 6-layer 
 DNN with 2048 rectified linear units at every layer. It was trained using 
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
-annealing~\citep[half the learning rate if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
+annealing~\citep[the learning rate is halfed if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
+% TODO
+% dima: we need to emphasize that the unseen noises are very important
 To evaluate the impact of our method on generalization to unseen noises,
 we performed 6 experiments with different sets of noises seen during training.
 The networks were trained
@@ -347,6 +351,7 @@ as the number of seen noise types varies. We conclude that the best performance
 gain is achieved when a small number of noise types are available during training. 
 It can be seen that invariance training is able to generalize better to unseen 
 noise types compared with multi-condition training.
+% dima: we need to add that this is good news and very reasonable
 
 We note that our experiments did not use layer-wise pre-training, commonly used for small
 datasets. The baseline WERs reported are very close to the state-of-the-art. 
