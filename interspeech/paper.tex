@@ -182,7 +182,7 @@ invariant with respect to these domains. We hypothesize that this adversarial me
 training helps the HMM state classifier to generalize better to unseen domain conditions and requires only a  
 small additional amount of supervision, i.e., the domain labels.  
 
-Figure \ref{fig:model} depicts the model, which is same as the model for the 
+Figure~\ref{fig:model} depicts the model, which is same as the model for the 
 gradient reverse method. It is a feed-forward neural network trained to predict 
 the CD-HMM state, with a branch that predicts the domain (noise condition). This 
 branch is discarded in the testing phase. In our experiments we
@@ -267,7 +267,7 @@ binary classifier predicting clean versus noisy data. Due to the imbalance betwe
 noisy utterances, we had to oversample noisy frames to ensure that every mini-batch contained
 equal number of clean and noisy speech frames.
 
-Table \ref{tab:results} summarizes the results. Figure \ref{fig:results} visualizes 
+Table~\ref{tab:results} summarizes the results. Figure~\ref{fig:results} visualizes 
 the word error rate (WER) for the baseline multi-condition training and invariance training 
 as the number of seen noise types varies. We conclude that the best performance
 gain is achieved when a small number of noise types are available during training. 
