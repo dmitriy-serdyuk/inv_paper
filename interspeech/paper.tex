@@ -182,10 +182,10 @@ reverse gradient
     Prior work by~\cite{ganin2014unsupervised} proposed a method for training a network 
     which can be adapted to new domains. The training data consists of the images
     labeled with classes of interest and separate domain (image background) labels. 
-    The network has a $Y$-like structure: the image is fed to the
+    The network has a $Y$-shaped structure: the image is fed to the
     first network which produces a hidden representation $h$. Then this 
-    representation $h$ is input to two separate networks: a domain classifier network (D) and 
-    a target classifier network (R). The goal of training is to learn a hidden 
+    representation $h$ is input to two separate networks: a domain classifier network ($D$) and 
+    a target classifier network ($R$). The goal of training is to learn a hidden 
     representation that is invariant to the domain labels and still performs well on 
     the target classification task, so that the domain information doesn't 
     interfere with the target classifier at test time. Similar to the GAN 
@@ -328,6 +328,7 @@ on the well-benchmarked Aurora-4 \citep{parihar2002aurora} noisy speech recognit
 is based on the Wall Street Journal corpus (WSJ0). It contains noises of 
 six categories which were added to the clean data. Every clean and noisy
 utterance has been 
+% TODO!!!!
 % what kind of frequency characteristics?
 filtered to simulate the phone quality recording using P.341 \citep{parihar2002aurora}. The training
 data contains 4400 clean utterances and 446 utterances for each noise condition,
@@ -343,8 +344,6 @@ DNN with 2048 rectified linear units at every layer. It was trained using
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
 annealing~\citep[the learning rate is halfed if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
-% TODO
-% dima: we need to emphasize that the unseen noises are very important
 To evaluate the impact of our method on generalization to \emph{unseen} noises (the
 most typical situation in practice),
 we performed 6 experiments with different sets of noises seen during training.
@@ -390,7 +389,11 @@ the same trend as the non-pretrained networks.
 
 We would like to thank Yaroslav Ganin, David Warde-Farley for insightful discussions,
 developers of Theano~\citep{theano2016theano}, Blocks, and Fuel~\citep{MerrienboerBDSW15} 
-for great toolkits.
+for great toolkits. 
+The authors would like to acknowledge the support of the following agencies for
+research funding and computing support: NSERC, Calcul Qu\'{e}bec, Compute Canada,
+the Canada Research Chairs and CIFAR. Dmitriy Serdyuk thanks Samsung for partial
+financial support of this work.
 
 \bibliographystyle{IEEEtranN}
 
