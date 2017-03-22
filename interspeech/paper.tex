@@ -1,6 +1,5 @@
 \documentclass[a4paper]{article}
 
-\usepackage{natbib}
 \usepackage{INTERSPEECH_v2}
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -62,17 +61,17 @@ reverse gradient
 
     Several model and feature based adaptation methods such as Maximum 
     Likelihood Linear Regression (MLLR),  feature-based MLLR and 
-    i-vectors~\citep{saon2013speaker} have been proposed to handle speaker 
-    variability; and Noise Adaptive Training \citep[NAT;][]{kalinli2010noise}
-    and Vector Taylor Series \citep[VTS;][]{un1998speech} to handle 
+    i-vectors~\cite{saon2013speaker} have been proposed to handle speaker 
+    variability; and Noise Adaptive Training~(NAT;~\cite{kalinli2010noise})
+    and Vector Taylor Series~(VTS;~\cite{un1998speech}) to handle 
     environment variability.
     % The end-to-end part has become sort of irrelevant given that the
     % experiments are actually with hybrid systems and this version of the paper will not
     % have to be sold as being end-to-end anymore.
     With the increasing success of Deep Neural 
     Network~(DNN) acoustic models for ASR investigated 
-    in~\citep{hinton2012deep,seide2011conversational,sainath2011making}, 
-    and in more recent works~\citep{miao2015eesen,sainath2015learning} 
+    in~\cite{hinton2012deep}\cite{seide2011conversational}\cite{sainath2011making}, 
+    and in more recent works~\cite{miao2015eesen}\cite{sainath2015learning} 
     complicated structure of acoustic conditions is modeled within a single network.
     This allows us to take 
     advantage of the network's ability to learn highly non-linear feature 
@@ -84,6 +83,8 @@ reverse gradient
     impossible to simply use the same types of adaptation and robustness methods
     that have been developed for GMM-based systems.
 
+    This work is a continuation of our preliminary results presented as a workshop 
+    paper~\cite{serdyuk2016invariant}.
     The main idea of this work is to force the acoustic model 
     to learn a representation which is invariant to noise conditions, instead of 
     explicitly using noise robust acoustic features 
@@ -215,13 +216,13 @@ reverse gradient
 
     Many neural network speaker adaptation methods are based on
     i-vectors. The most common way to exploit i-vectors is by providing them as additional
-    inputs~\citep{senior2014improving,saon2013speaker}. This means that i-vectors also need to
+    inputs~\cite{senior2014improving,saon2013speaker}. This means that i-vectors also need to
     be available during testing and this may not always be practical.
 
     In the specific case of noise robustness, one can use speech enhancement to
     obtain more robust features and neural networks have been used for this for
-    decades~\citep{knecht1995neural}. A further step in this direction is to train
-    systems to recognize speech and perform speech enhancement jointly~\citep{narayanan2014joint}. 
+    decades~\cite{knecht1995neural}. A further step in this direction is to train
+    systems to recognize speech and perform speech enhancement jointly~\cite{narayanan2014joint}. 
     We argue that speech enhancement is a more difficult task to learn than
     invariance to certain noise conditions and more likely to suffer from
     overfitting when the amount of available noisy data is limited.
@@ -232,10 +233,10 @@ reverse gradient
     Another adaptation strategy is to retrain the model parameters using a very small
     number of utterances from the new domain while making sure that the model
     doesn't stray too far away from the parameter values that were obtained from
-    the train data~\citep{yu2013kl}.
+    the train data~\cite{yu2013kl}.
     The adaptation to new domains can also be kept under control by limiting
     the number of parameters which are adapted to the new data or by limiting the
-    adaptation to a rescaling of the hidden unit activations~\citep{swietojanski2014learning}.
+    adaptation to a rescaling of the hidden unit activations~\cite{swietojanski2014learning}.
     The most important difference between these approaches and our work is that
     we don't adapt the model parameters at all after training. In many
     situations this may not be possible and retraining of models may require more
@@ -247,7 +248,7 @@ reverse gradient
     more challenging benchmark while investigating different numbers of noise
     conditions. Our work also differs due to the use of more modern rectifier
     activation based classification networks.
-    Finally, in other very recent work~\citep{saon2017english} a form of adversarial training with a network
+    Finally, in other very recent work~\cite{saon2017english} a form of adversarial training with a network
     that predicts an i-vector using the mean square error loss was used.
 
 \section{Invariant Representations for Speech Recognition}
@@ -320,11 +321,11 @@ For simplicity, we use only a single hyper-parameter -- the weight of the third 
 \section{Experiments}
 \label{sec:experiments}
 We experimentally evaluated our approach   
-on the well-benchmarked Aurora-4 \citep{parihar2002aurora} noisy speech recognition task. Aurora-4
+on the well-benchmarked Aurora-4 \cite{parihar2002aurora} noisy speech recognition task. Aurora-4
 is based on the Wall Street Journal corpus (WSJ0). It contains noises of 
 six categories which were added to the clean data. Every clean and noisy
 utterance has been 
-filtered to simulate the phone quality recording using P.341 \citep{pariharsignal}. The training
+filtered to simulate the phone quality recording using P.341 \cite{pariharsignal}. The training
 data contains 4400 clean utterances and 446 utterances for each noise condition,
 i.e., a total of 2676 noisy utterances.
 The test set consists of clean data, data corrupted by 6 noise types, and data 
@@ -336,7 +337,7 @@ features that were subsequently mean and variance normalized. The baseline
 acoustic model was a 6-layer 
 DNN with 2048 rectified linear units at every layer. It was trained using 
 momentum-accelerated stochastic gradient descent for 15 epochs with new-bob 
-annealing~\citep[the learning rate is halved if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
+annealing~\cite[the learning rate is halved if no improvement on the validation set, as in][]{morgan1995continuous,sainath2011making}.
 
 To evaluate the impact of our method on generalization to \emph{unseen} noises (the
 most typical situation in practice),
@@ -401,7 +402,7 @@ the same trend as the non-pretrained networks.
     helps the ASR system to generalize better to unseen noise conditions and improves 
     the word error rate when a small number of noise types are seen during training. Our 
     experiments show that, relative to the image recognition tasks reported
-    by \citet{ganin2014unsupervised}, the task of the domain classification ($D$) network is
+    by \cite{ganin2014unsupervised}, the task of the domain classification ($D$) network is
     harder for speech recognition. Therefore, the 
     gradient of the $L_3$ term in Eq.~\ref{eq:grm} is noisier. Future 
     research includes enhancements to the domain adaptation network while exploring 
@@ -410,7 +411,7 @@ the same trend as the non-pretrained networks.
 \section{Acknowledgments}
 
 We would like to thank Yaroslav Ganin, David Warde-Farley for insightful discussions,
-developers of Theano~\citep{theano2016theano}, Blocks, and Fuel~\citep{MerrienboerBDSW15} 
+developers of Theano~\cite{theano2016theano}, Blocks, and Fuel~\cite{MerrienboerBDSW15} 
 for great toolkits. 
 The authors would like to acknowledge the support of the following agencies for
 research funding and computing support: NSERC, Calcul Qu\'{e}bec, Compute Canada,
@@ -418,7 +419,7 @@ the Canada Research Chairs and CIFAR. Dmitriy Serdyuk thanks Samsung for partial
 financial support of this work and IBM Watson where he performed this work 
 during an internship.
 
-\bibliographystyle{IEEEtranN}
+\bibliographystyle{IEEEtran}
 
 \bibliography{refs}
 \end{document}
